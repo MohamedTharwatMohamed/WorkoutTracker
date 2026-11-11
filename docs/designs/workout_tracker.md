@@ -1523,11 +1523,14 @@ command passes locally and in CI.
     *   `body.spec.ts` (CUJ 8): enter weight and waist, a second entry, trend
         shown; arm needs a side; focusing a field changes the measuring
         guide; setting a check-in day shows the status on Home.
-    *   `update.spec.ts` (CUJ 6): builds twice with `APP_BUILD=a vite build
-        --outDir dist-a` and `APP_BUILD=b vite build --outDir dist-b`.
+    *   `update.spec.ts` (CUJ 6): Playwright `globalSetup`
+        (`e2e/support/globalSetup.ts`) builds twice with `APP_BUILD=a vite
+        build --outDir dist-a` and `APP_BUILD=b vite build --outDir dist-b`
+        before any browser starts, so the builds do not slow other tests.
         `e2e/support/swapServer.mjs` serves `dist-a` on port 4174 and
         switches to `dist-b` on `POST /__swap`, same origin. The test loads
-        the app, opens a session, swaps, calls `registration.update()`
+        the app, opens a session, reloads once so the service worker controls
+        the page, swaps, calls `registration.update()`
         through `page.evaluate`, and checks no banner shows; finishes the
         session, checks the banner shows, taps it, and checks About shows
         build `b`. Runs only in the Desktop Chrome project.
@@ -1558,7 +1561,9 @@ command passes locally and in CI.
         .nvmrc` and npm cache, then in order: `npm ci`, `npm run lint`,
         `npm run catalog:check` (with `BASE_REF: ${{ github.base_ref }}`),
         `npm run test:coverage`, `npm run build`, `npx playwright install
-        --with-deps`, `npm run e2e`. Then `Azure/static-web-apps-deploy@v1`
+        --with-deps`, `npm run e2e` (on failure, the Playwright report and
+        traces are uploaded as an artifact for 7 days). Then
+        `Azure/static-web-apps-deploy@v1`
         (step `id: deploy`) with `action: upload`, `app_location: dist`,
         `skip_app_build: true` and the secret
         `AZURE_STATIC_WEB_APPS_API_TOKEN`. Pull requests deploy to a preview

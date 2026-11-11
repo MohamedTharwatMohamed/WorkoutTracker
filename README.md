@@ -32,7 +32,23 @@ npm run e2e          # Playwright end-to-end tests
 
 GitHub Actions (`.github/workflows/azure-static-web-apps.yml`) builds and tests every
 push to `master` and every pull request, then deploys `dist/` to Azure Static Web Apps
-(Free plan). Pull requests get preview environments.
+(Free plan). Pull requests get preview environments, removed when the pull request closes.
+After each deploy a smoke step checks the main files and that `sw.js` is not cached.
+
+Live address: _not set yet. Add the `*.azurestaticapps.net` address here after creating
+the resource._
+
+One-time setup (in Azure and GitHub, not in this repository):
+
+1. Create the Static Web App (Free plan) linked to this repository, with build presets
+   turned off (the workflow builds the app itself).
+2. Add its deployment token as the repository secret `AZURE_STATIC_WEB_APPS_API_TOKEN`.
+   Until then the deploy step fails; tests still run.
+3. Create an Azure budget with an e-mail alert at 100% of actual cost.
+
+`npm run e2e` first builds two extra copies of the app (`dist-a`, `dist-b`) for the
+update test, then runs every journey on a phone (Chrome and Safari) and a desktop.
+Run `npx playwright install` once before the first local run.
 
 **Never delete the Azure Static Web App resource.** Each user's data is tied to the
 site's address; a new resource gets a new address, and the data on every phone would

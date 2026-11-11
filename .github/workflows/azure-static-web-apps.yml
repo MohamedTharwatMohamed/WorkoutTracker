@@ -26,6 +26,42 @@ jobs:
           BASE_REF: ${{ github.base_ref }}
       - run: npm run test:coverage
       - run: npm run build
-      # Added in P6: npx playwright install --with-deps, npm run e2e,
-      # Azure/static-web-apps-deploy@v1 (id: deploy, action: upload), smoke step,
-      # and the close_preview job for closed pull requests.
+      - run: npx playwright install --with-deps
+      - run: npm run e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7
+      - id: deploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: upload
+          app_location: dist
+          skip_app_build: true
+      - name: Smoke test
+        env:
+          URL: ${{ steps.deploy.outputs.static_web_app_url }}
+        run: |
+          set -euo pipefail
+          for path in / /sw.js /manifest.webmanifest /catalog/catalog.json; do
+            curl --fail --silent --show-error --retry 5 --retry-all-errors -o /dev/null "$URL$path"
+            echo "ok $path"
+          done
+          curl --fail --silent --show-error -o /dev/null -D - "$URL/sw.js" | tr -d '\r' | grep -iq '^cache-control: *no-cache'
+          echo "ok /sw.js is no-cache"
+
+  close_preview:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: close
+          app_location: dist
