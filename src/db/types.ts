@@ -67,6 +67,28 @@ export interface RoutineItem {
   scheme?: SetScheme;
 }
 
+export type PlanGoal = 'muscle' | 'strength' | 'toning' | 'health';
+export const PLAN_GOALS: readonly PlanGoal[] = ['muscle', 'strength', 'toning', 'health'];
+export type PlanLevel = 'beginner' | 'intermediate';
+export const PLAN_LEVELS: readonly PlanLevel[] = ['beginner', 'intermediate'];
+
+export interface PlanDay {
+  name: string;
+  items: RoutineItem[];
+}
+
+/** A plan the user made or imported. Focus is worked out from its machines. */
+export interface CustomPlan extends BaseRecord {
+  name: string;
+  tagline: string;
+  description: string;
+  goal: PlanGoal;
+  level: PlanLevel;
+  daysPerWeek: number;
+  minutes: number;
+  days: PlanDay[];
+}
+
 export interface Routine extends BaseRecord {
   name: string;
   items: RoutineItem[];

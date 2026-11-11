@@ -14,7 +14,7 @@ export async function readAll(): Promise<StoredBackup> {
   const d = db();
   return d.transaction(
     'r',
-    [d.profile, d.machines, d.machineSettings, d.routines, d.sessions, d.sets, d.measurements, d.photos],
+    [d.profile, d.machines, d.machineSettings, d.routines, d.plans, d.sessions, d.sets, d.measurements, d.photos],
     async () => ({
       data: {
         profile: (await d.profile.get('me')) ?? null,
@@ -24,6 +24,7 @@ export async function readAll(): Promise<StoredBackup> {
         sessions: await d.sessions.toArray(),
         sets: await d.sets.toArray(),
         measurements: await d.measurements.toArray(),
+        plans: await d.plans.toArray(),
       },
       photos: await d.photos.toArray(),
     }),
@@ -39,6 +40,7 @@ export async function replaceAll({ data, photos }: StoredBackup): Promise<void> 
       d.machines,
       d.machineSettings,
       d.routines,
+      d.plans,
       d.sessions,
       d.sets,
       d.measurements,
@@ -53,6 +55,7 @@ export async function replaceAll({ data, photos }: StoredBackup): Promise<void> 
     await d.sessions.bulkAdd(data.sessions);
     await d.sets.bulkAdd(data.sets);
     await d.measurements.bulkAdd(data.measurements);
+    await d.plans.bulkAdd(data.plans ?? []);
     await d.photos.bulkAdd(photos);
 
     const at = new Date().toISOString();

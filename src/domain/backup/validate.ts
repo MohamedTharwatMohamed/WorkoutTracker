@@ -1,4 +1,4 @@
-import { MUSCLE_GROUPS, SET_SCHEMES, SIDED_SITES, SITES } from '../../db/types';
+import { MUSCLE_GROUPS, PLAN_GOALS, PLAN_LEVELS, SET_SCHEMES, SIDED_SITES, SITES } from '../../db/types';
 import { checksum } from './build';
 import {
   BACKUP_FORMAT,
@@ -39,6 +39,18 @@ const base = fields({
   deviceId: isStr,
 });
 
+const isItems = (v: unknown): boolean =>
+  Array.isArray(v) &&
+  v.every(
+    (i) =>
+      isObj(i) &&
+      isStr(i.machineId) &&
+      isNonNeg(i.targetSets) &&
+      isNonNeg(i.targetReps) &&
+      optional(i.targetWeightKg, isNonNeg) &&
+      optional(i.scheme, (s) => SET_SCHEMES.includes(s as never)),
+  );
+
 const checks: Record<keyof Omit<BackupData, 'profile'> | 'profile', Check[]> = {
   profile: [
     base,
@@ -73,21 +85,18 @@ const checks: Record<keyof Omit<BackupData, 'profile'> | 'profile', Check[]> = {
       hidden: (v) => typeof v === 'boolean',
     }),
   ],
-  routines: [
+  routines: [base, fields({ name: isStr, items: isItems })],
+  plans: [
     base,
     fields({
       name: isStr,
-      items: (v) =>
-        Array.isArray(v) &&
-        v.every(
-          (i) =>
-            isObj(i) &&
-            isStr(i.machineId) &&
-            isNonNeg(i.targetSets) &&
-            isNonNeg(i.targetReps) &&
-            optional(i.targetWeightKg, isNonNeg) &&
-            optional(i.scheme, (s) => SET_SCHEMES.includes(s as never)),
-        ),
+      tagline: isStr,
+      description: isStr,
+      goal: (v) => PLAN_GOALS.includes(v as never),
+      level: (v) => PLAN_LEVELS.includes(v as never),
+      daysPerWeek: (v) => isNum(v) && v >= 1 && v <= 7,
+      minutes: isNonNeg,
+      days: (v) => Array.isArray(v) && v.every((d) => isObj(d) && isStr(d.name) && isItems(d.items)),
     }),
   ],
   sessions: [
@@ -204,6 +213,7 @@ export async function validateBackup(json: unknown): Promise<ValidationResult> {
     checkTable(name, data[name], errors);
   }
   checkTable('machineSettings', data.machineSettings, errors, 'machineId');
+  if (data.plans !== undefined) checkTable('plans', data.plans, errors);
 
   const photos = file.photos;
   if (!Array.isArray(photos)) {
@@ -238,5 +248,7 @@ export async function validateBackup(json: unknown): Promise<ValidationResult> {
   if ((await checksum(valid.data, valid.photos)) !== valid.manifest.sha256) {
     errors.push('Checksum mismatch: the file is damaged or was edited');
   }
-  return errors.length > 0 ? { ok: false, errors } : { ok: true, file: valid };
+  if (errors.length > 0) return { ok: false, errors };
+  // Normalised only after the checksum, which covers the data as stored.
+  return { ok: true, file: { ...valid, data: { ...valid.data, plans: valid.data.plans ?? [] } } };
 }

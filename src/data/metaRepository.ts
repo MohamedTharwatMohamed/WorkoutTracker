@@ -21,7 +21,7 @@ export async function set(key: MetaKey, value: MetaEntry['value']): Promise<void
 export async function changesSinceExport(): Promise<{ sets: number; total: number }> {
   const d = db();
   const last = await get('lastExportAt');
-  const indexed = [d.sets, d.sessions, d.measurements, d.machines, d.machineSettings, d.routines, d.photos];
+  const indexed = [d.sets, d.sessions, d.measurements, d.machines, d.machineSettings, d.routines, d.plans, d.photos];
   const counts = await Promise.all(
     indexed.map((table) =>
       typeof last === 'string' ? table.where('updatedAt').above(last).count() : table.count(),

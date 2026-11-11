@@ -1,6 +1,7 @@
 import Dexie, { type EntityTable, type Table } from 'dexie';
 import type {
   CustomMachine,
+  CustomPlan,
   ErrorEntry,
   JournalEntry,
   MachineSettings,
@@ -15,6 +16,20 @@ import type {
 
 export const DB_NAME = 'workout-tracker';
 
+export const V1_STORES = {
+  profile: 'id',
+  machines: 'id, updatedAt',
+  machineSettings: 'machineId, updatedAt',
+  photos: 'id, updatedAt',
+  routines: 'id, updatedAt',
+  sessions: 'id, state, startedAt, updatedAt',
+  sets: 'id, sessionId, [machineId+loggedAt], loggedAt, updatedAt',
+  measurements: 'id, [site+takenAt], updatedAt',
+  journal: '++seq, entityId',
+  errors: '++seq',
+  meta: 'key',
+} as const;
+
 /*
  * Upgrade rules:
  * - Version numbers only increase.
@@ -28,6 +43,7 @@ export class WorkoutDb extends Dexie {
   machineSettings!: EntityTable<MachineSettings, 'machineId'>;
   photos!: EntityTable<Photo, 'id'>;
   routines!: EntityTable<Routine, 'id'>;
+  plans!: EntityTable<CustomPlan, 'id'>;
   sessions!: EntityTable<Session, 'id'>;
   sets!: EntityTable<SetRecord, 'id'>;
   measurements!: EntityTable<Measurement, 'id'>;
@@ -37,18 +53,7 @@ export class WorkoutDb extends Dexie {
 
   constructor(name: string = DB_NAME) {
     super(name);
-    this.version(1).stores({
-      profile: 'id',
-      machines: 'id, updatedAt',
-      machineSettings: 'machineId, updatedAt',
-      photos: 'id, updatedAt',
-      routines: 'id, updatedAt',
-      sessions: 'id, state, startedAt, updatedAt',
-      sets: 'id, sessionId, [machineId+loggedAt], loggedAt, updatedAt',
-      measurements: 'id, [site+takenAt], updatedAt',
-      journal: '++seq, entityId',
-      errors: '++seq',
-      meta: 'key',
-    });
+    this.version(1).stores(V1_STORES);
+    this.version(2).stores({ plans: 'id, updatedAt' });
   }
 }

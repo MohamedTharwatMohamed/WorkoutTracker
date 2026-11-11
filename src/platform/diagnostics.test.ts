@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { SCHEMA_VERSION } from '../buildInfo';
 import type { WorkoutDb } from '../db/schema';
 import { T0, at, journalEntry, makeMeasurement, makeProfile, makeSession, makeSet } from '../test/factories';
 import { freshDb } from '../test/db';
@@ -42,7 +43,7 @@ describe('buildDiagnostics', () => {
     expect(diagnostics.counts).toMatchObject({ sets: 2, sessions: 1, measurements: 1, profile: 1 });
     expect(diagnostics.consistency.clean).toBe(true);
     expect(diagnostics.catalogVersion).toBe(1);
-    expect(diagnostics.schemaVersion).toBe(1);
+    expect(diagnostics.schemaVersion).toBe(SCHEMA_VERSION);
   });
 
   it('reports a consistency problem and the error log', async () => {

@@ -1,12 +1,7 @@
-import type { MuscleGroup, RoutineItem, SetScheme } from '../db/types';
+import type { MuscleGroup, PlanDay, PlanGoal, PlanLevel, RoutineItem, SetScheme } from '../db/types';
 
-export type PlanGoal = 'muscle' | 'strength' | 'toning' | 'health';
-export type PlanLevel = 'beginner' | 'intermediate';
-
-export interface PlanDay {
-  name: string;
-  items: RoutineItem[];
-}
+export { PLAN_GOALS, PLAN_LEVELS } from '../db/types';
+export type { PlanDay, PlanGoal, PlanLevel } from '../db/types';
 
 export interface Plan {
   id: string;
@@ -19,9 +14,9 @@ export interface Plan {
   daysPerWeek: number;
   minutes: number;
   days: PlanDay[];
+  /** True for plans the user made or imported. */
+  custom?: boolean;
 }
-
-export const PLAN_GOALS: readonly PlanGoal[] = ['muscle', 'strength', 'toning', 'health'];
 
 const M = {
   chestPress: 'technogym-selection-900-chest-press',

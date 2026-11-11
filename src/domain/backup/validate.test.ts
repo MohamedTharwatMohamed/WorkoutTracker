@@ -10,7 +10,7 @@ import { validateBackup } from './validate';
 const meta = { appBuild: 'test', deviceId: 'dev', exportedAt: '2025-01-05T00:00:00.000Z' };
 
 async function goldenFile(): Promise<BackupFile> {
-  const data = structuredClone(golden.data) as unknown as BackupData;
+  const data = { ...structuredClone(golden.data), plans: [] } as unknown as BackupData;
   return buildBackup(data, structuredClone(golden.photos) as BackupPhoto[], meta);
 }
 
@@ -29,8 +29,35 @@ describe('validateBackup', () => {
     expect(result).toEqual({ ok: true, file: asJson(file) });
   });
 
-  it('accepts the stored version-1 file fixture', async () => {
-    expect(await errorsOf(backupV1)).toEqual([]);
+  it('accepts the stored version-1 file fixture and reads it with no plans', async () => {
+    const result = await validateBackup(backupV1);
+    expect(result.ok && result.file.data.plans).toEqual([]);
+    expect(result.ok && result.file.manifest.counts.plans).toBe(0);
+  });
+
+  it('checks custom plans', async () => {
+    const plan = {
+      id: 'my-1',
+      createdAt: meta.exportedAt,
+      updatedAt: meta.exportedAt,
+      deletedAt: null,
+      deviceId: 'dev',
+      name: 'Mine',
+      tagline: '',
+      description: '',
+      goal: 'muscle',
+      level: 'beginner',
+      daysPerWeek: 2,
+      minutes: 45,
+      days: [{ name: 'A', items: [{ machineId: 'm1', targetSets: 3, targetReps: 10, scheme: 'pyramid' }] }],
+    };
+    const good = await goldenFile();
+    good.data.plans = [plan as never];
+    expect(await errorsOf(asJson(await buildBackup(good.data, good.photos, meta)))).toEqual([]);
+    good.data.plans = [{ ...plan, goal: 'fly' } as never];
+    expect(await errorsOf(asJson(await buildBackup(good.data, good.photos, meta)))).toEqual([
+      'data.plans[0]: bad field "goal"',
+    ]);
   });
 
   it('rejects other files', async () => {

@@ -1,9 +1,15 @@
 /**
  * Ordered upgrade steps for older backup files. Step N turns a version N file
- * into a version N+1 file. Empty while the only format version is 1.
+ * into a version N+1 file. Steps never touch `data` so the stored checksum still matches.
  */
-export const upgradeSteps: Record<number, (file: Record<string, unknown>) => Record<string, unknown>> =
-  {};
+export const upgradeSteps: Record<number, (file: Record<string, unknown>) => Record<string, unknown>> = {
+  // Version 2 added custom plans. A missing data.plans is read as an empty list.
+  1: (file) => {
+    const manifest = (file.manifest ?? {}) as Record<string, unknown>;
+    const counts = (manifest.counts ?? {}) as Record<string, unknown>;
+    return { ...file, manifest: { ...manifest, counts: { ...counts, plans: 0 } } };
+  },
+};
 
 export function upgradeBackup(
   file: Record<string, unknown>,

@@ -2,21 +2,22 @@ import Dexie from 'dexie';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { getDb, setDb } from './current';
 import { onDbAlert, openDatabase } from './open';
-import { DB_NAME, WorkoutDb } from './schema';
+import { DB_NAME, V1_STORES, WorkoutDb } from './schema';
 import * as snapshot from './snapshot';
 import { MARKER_KEY, readMarker, writeMarker } from '../platform/storage';
 import seed from '../test/fixtures/db-v1-seed.json';
 
 /** Test-only next schema version, to exercise the upgrade path. */
-class WorkoutDbV2 extends WorkoutDb {
+class WorkoutDbNext extends WorkoutDb {
   constructor() {
     super();
-    this.version(2).stores({ extra: 'id' });
+    this.version(3).stores({ extra: 'id' });
   }
 }
 
-async function seedV1(): Promise<void> {
-  const db = new WorkoutDb();
+async function seedV1(current = false): Promise<void> {
+  const db = current ? new WorkoutDb() : new Dexie(DB_NAME);
+  if (!current) db.version(1).stores(V1_STORES);
   await db.open();
   for (const [table, rows] of Object.entries(seed)) await db.table(table).bulkAdd(rows);
   db.close();
@@ -47,17 +48,26 @@ describe('openDatabase', () => {
   });
 
   it('writes the marker on a normal launch with data', async () => {
-    await seedV1();
+    await seedV1(true);
     expect((await ok(await openDatabase())).kind).toBe('ok');
     expect(readMarker()).toEqual({ sets: 2, sessions: 1, measurements: 1 });
     expect(await snapshot.list()).toEqual([]);
   });
 
+  it('upgrades a version 1 database: snapshot taken, data kept, empty plans table', async () => {
+    await seedV1();
+    const result = await ok(await openDatabase());
+    expect(result.db.verno).toBe(2);
+    expect((await snapshot.list())[0]?.fromVersion).toBe(1);
+    expect(await result.db.sets.count()).toBe(2);
+    expect(await result.db.plans.count()).toBe(0);
+  });
+
   it('takes a snapshot before an upgrade', async () => {
     await seedV1();
-    const result = await ok(await openDatabase({ create: () => new WorkoutDbV2(), schemaVersion: 2 }));
+    const result = await ok(await openDatabase({ create: () => new WorkoutDbNext(), schemaVersion: 3 }));
     expect(result.kind).toBe('ok');
-    expect(result.db.verno).toBe(2);
+    expect(result.db.verno).toBe(3);
     const snaps = await snapshot.list();
     expect(snaps).toHaveLength(1);
     expect(snaps[0]?.fromVersion).toBe(1);
@@ -110,7 +120,7 @@ describe('openDatabase', () => {
     const alerts: string[] = [];
     onDbAlert((a) => alerts.push(a));
     const { db } = await ok(await openDatabase());
-    const other = new WorkoutDbV2();
+    const other = new WorkoutDbNext();
     await other.open();
     expect(alerts).toEqual(['versionchange']);
     expect(db.isOpen()).toBe(false);
@@ -137,7 +147,7 @@ describe('openDatabase', () => {
       // Simulates another tab that ignores the request, then closes a moment later.
       setTimeout(() => raw.close(), 50);
     };
-    const result = openDatabase({ create: () => new WorkoutDbV2(), schemaVersion: 2 });
+    const result = openDatabase({ create: () => new WorkoutDbNext(), schemaVersion: 3 });
     await vi.waitFor(() => expect(alerts).toContain('blocked'));
     expect((await result).kind).toBe('ok');
   });

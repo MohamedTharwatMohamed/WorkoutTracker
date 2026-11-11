@@ -3,7 +3,9 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { Link } from 'react-router';
 import { MachineImage } from '../components/MachineImage';
 import { PageHeader } from '../components/PageHeader';
+import { PlanTools } from '../components/PlanTools';
 import * as machineRepository from '../data/machineRepository';
+import * as planRepository from '../data/planRepository';
 import { PLAN_GOALS, PLANS, type Plan, type PlanGoal } from '../data/plans';
 import * as routineRepository from '../data/routineRepository';
 import { MUSCLE_GROUPS, type MuscleGroup } from '../data/types';
@@ -58,11 +60,13 @@ export function PlansScreen() {
   const [goal, setGoal] = useState<PlanGoal | null>(null);
   const [focus, setFocus] = useState<MuscleGroup | null>(null);
   const data = useLiveQuery(async () => {
-    const [routine, machines] = await Promise.all([routineRepository.peek(), machineRepository.getMany(allPlanMachineIds)]);
-    return { routine: routine ?? null, machines: new Map(machines.map((m) => [m.id, m])) };
+    const [routine, custom] = await Promise.all([routineRepository.peek(), planRepository.views()]);
+    const ids = [...new Set([...allPlanMachineIds, ...custom.flatMap((p) => p.days.flatMap((d) => d.items.map((i) => i.machineId)))])];
+    const machines = await machineRepository.getMany(ids);
+    return { routine: routine ?? null, custom, machines: new Map(machines.map((m) => [m.id, m])) };
   }, []);
 
-  const shown = PLANS.filter((p) => (!goal || p.goal === goal) && (!focus || p.focus.includes(focus)));
+  const shown = [...(data?.custom ?? []), ...PLANS].filter((p) => (!goal || p.goal === goal) && (!focus || p.focus.includes(focus)));
 
   return (
     <div className="flex flex-col gap-5">
@@ -85,6 +89,8 @@ export function PlansScreen() {
         </div>
         <span className="btn-secondary">{strings.plans.editRoutine}</span>
       </Link>
+
+      <PlanTools />
 
       <div className="card flex flex-col gap-3 py-4">
         <FilterRow label={strings.plans.goal} value={goal} onChange={setGoal} options={PLAN_GOALS} name={(g) => strings.plans.goals[g]} />
@@ -113,6 +119,11 @@ export function PlansScreen() {
                   <span className="absolute top-2 left-0 -skew-x-12 bg-accent px-3 py-0.5 font-display text-sm font-semibold uppercase text-ink">
                     {strings.plans.goals[plan.goal]}
                   </span>
+                  {plan.custom && (
+                    <span className="absolute top-2 right-2 rounded-md bg-bg/90 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-text">
+                      {strings.plans.myPlan}
+                    </span>
+                  )}
                 </div>
                 <div className="flex flex-1 flex-col gap-2 p-4">
                   <h2 className="font-display text-2xl leading-tight font-semibold uppercase group-hover:text-accent">

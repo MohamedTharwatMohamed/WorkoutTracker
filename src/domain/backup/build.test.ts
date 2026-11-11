@@ -43,11 +43,11 @@ describe('buildBackup', () => {
     });
     expect(file).toMatchObject({
       format: 'workout-tracker-backup',
-      formatVersion: 1,
+      formatVersion: 2,
       appBuild: 'test',
       manifest: {
         sha256: goldenHash.trim(),
-        counts: { profile: 1, machines: 1, machineSettings: 1, routines: 1, sessions: 1, sets: 2, measurements: 1, photos: 1 },
+        counts: { profile: 1, machines: 1, machineSettings: 1, routines: 1, sessions: 1, sets: 2, measurements: 1, plans: 0, photos: 1 },
       },
     });
   });

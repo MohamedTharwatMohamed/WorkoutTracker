@@ -261,6 +261,7 @@ migration.
 | `machineSettings` | `machineId`, `photoId?`, `weightStepKg?`, `restSec?`, `hidden` | User overrides for built-in machines. |
 | `photos` | `id`, `blob` (≤50 KB after resize), `mime` (`image/webp`, or `image/jpeg` where WebP encoding is unavailable) | User photos. |
 | `routines` | `id`, `name`, `items[]: {machineId, targetSets, targetReps, targetWeightKg?, scheme?}` | One routine in v1 (`id='main'`). The table allows several routines later without a migration. `scheme` is the set style (item 54); absent means straight sets. |
+| `plans` | `id` (`my-<uuid>`), `name`, `tagline`, `description`, `goal`, `level`, `daysPerWeek`, `minutes`, `days[]: {name, items[]}` | The user's own plans (schema version 2, item 55). |
 | `sessions` | `id`, `routineId?`, `state`, `machineOrder[]`, `startedAt?`, `finishedAt?`, `currentMachineId?`, `restStartedAt?`, `restEndsAt?` | At most one open session (`notStarted`, `active` or `resting`). |
 | `sets` | `id`, `sessionId`, `machineId`, `setNumber`, `reps`, `weightKg`, `loggedAt`, `restBeforeSec?` | Indexed by `[machineId+loggedAt]` and `sessionId`. |
 | `measurements` | `id`, `site`, `side?` (left/right), `value`, `takenAt` | Value in kg (weight) or cm. |
@@ -339,19 +340,21 @@ missing.
     changed since the last backup. A banner appears when that number is 1 or
     more and the last backup is more than 7 days old.
 
-### Backup file (format version 1)
+### Backup file (format version 2)
+
+Version 2 adds `data.plans` (item 55). Version 1 files still import.
 
 ```json
 {
   "format": "workout-tracker-backup",
-  "formatVersion": 1,
-  "schemaVersion": 1,
+  "formatVersion": 2,
+  "schemaVersion": 2,
   "appBuild": "<git sha>",
   "exportedAt": "2026-11-11T16:00:00Z",
   "deviceId": "<uuid>",
   "manifest": { "counts": { "sets": 120, "sessions": 9, "...": 0 }, "sha256": "<of data and photos>" },
   "data": { "profile": {}, "machines": [], "machineSettings": [], "routines": [],
-            "sessions": [], "sets": [], "measurements": [] },
+            "plans": [], "sessions": [], "sets": [], "measurements": [] },
   "photos": [ { "id": "<uuid>", "mime": "image/webp", "base64": "..." } ]
 }
 ```
@@ -412,7 +415,8 @@ site has no API, no cookies and no third-party requests.
 | Route | Screen |
 | --- | --- |
 | `/` | Home dashboard: hero with today's session or Resume, weekly stats (workouts, sets, volume, week streak), Next up machines, Body card with weekly check-in status, muscle balance body map, recent workouts. |
-| `/plans`, `/plans/:id` | Ready-made plans library with Goal and Focus filters; plan detail with days, set styles, Start now and Use as my routine. |
+| `/plans`, `/plans/:id` | Ready-made plans library with Goal and Focus filters, plus my own plans (item 55) and Create, Import and Download template; plan detail with days, set styles, Start now and Use as my routine (Edit and Delete for my own plans). |
+| `/plans/new`, `/plans/:id/edit` | Plan editor for my own plans (item 55). | 
 | `/session` | Active session: machine list in routine order (skip, move up or down), set logging with set-style hints, rest timer. |
 | `/machines`, `/machines/:id` | Search and muscle-group filter chips, machine detail with "Muscles worked" body map, history, photo replace. |
 | `/machines/new`, `/machines/:id/edit` | Custom machine form (`MachineFormScreen`); edit also changes settings of a built-in machine. |
@@ -551,6 +555,7 @@ command passes locally and in CI.
 | P5 Components and screens | 19-20, 45-46 | `npm run lint && npm test && npm run build` |
 | P5b UX redesign (approved in review with the author) | 54 | `npm run lint && npm test && npm run build && npm run catalog:check` |
 | P6 End-to-end tests and deploy | 52 (covering the P5b screens too), 53 (deploy and preview jobs), Manual setup 1-3 | `npm run e2e`, then a green PR preview and production smoke step |
+| P7 Custom plans, import and template | 55 | `npm run lint && npm test && npm run build && npm run e2e` |
 
 ### Target Files to Create/Modify
 
@@ -1576,6 +1581,47 @@ command passes locally and in CI.
     *   Job `close_preview` (`if: github.event_name == 'pull_request' &&
         github.event.action == 'closed'`): `Azure/static-web-apps-deploy@v1`
         with `action: close` and the same token.
+
+##### 55. Custom plans: create, edit, import and template (Create and Modify)
+
+*   **Type / Scope**: data, domain and UI. Requested after P6.
+*   **Data**: new table `plans` (Dexie version 2, `SCHEMA_VERSION = 2`) with
+    the base fields plus `name`, `tagline`, `description`, `goal`
+    (`muscle`/`strength`/`toning`/`health`), `level`
+    (`beginner`/`intermediate`), `daysPerWeek` (1–7), `minutes`, and `days[]:
+    {name, items: RoutineItem[]}`. IDs are `my-<uuid>`. Deletes are soft.
+    `planRepository` has `list`, `get`, `save`, `importMany`, `remove`,
+    `views` and `view`; views add `focus` (muscle groups of the plan's
+    machines) and `custom: true` so screens treat them like ready-made plans.
+*   **Backup format version 2**: `data.plans` is added. The 1 → 2 upgrade only
+    sets `manifest.counts.plans = 0`; it never changes `data`, so the v1
+    checksum still matches. Validation checks plans when present, then
+    defaults them to `[]`.
+*   **Screens**: `/plans` gets a "Make your own" card (Create plan, Import plan,
+    Download template) and lists custom plans first with a "My plan" badge;
+    filters apply to them too. `/plans/new` and `/plans/:id/edit` are
+    `PlanEditorScreen` (details, days with machines, sets, reps, set style and
+    target weight). Custom plan detail adds Edit plan and Delete plan.
+*   **Template** (`src/domain/planTemplate.ts`, `src/domain/xlsx.ts`, no new
+    dependency): `workout-plan-template.xlsx` with sheets Instructions, Plans,
+    Exercises, Machines (every machine the user can pick, including their
+    own, with its ID, label, brand, line and muscle group) and Lists (Goals,
+    Levels, Set styles with how each works, Muscle groups). Plans and
+    Exercises columns have drop-down validations bound to named ranges, and
+    the file includes one example plan. The reader accepts stored and
+    deflated parts and shared or inline strings, so files saved by Excel,
+    LibreOffice or Google Sheets import.
+*   **Import rules**: all-or-nothing; every error names its sheet and row.
+    Values may be labels or codes (any case). A machine may be given by its
+    label, ID, or name when the name is unique. Blank level = Beginner, blank
+    set style = Straight sets, blank days per week = number of days, blank
+    minutes = 45. A plan with the same name as one of the user's plans
+    replaces it; ready-made plans are never changed. Weights are in kg.
+*   **Tests**: `planTemplate.test.ts` (round trip, Excel-saved fixture,
+    error rows), `planRepository.test.ts`, backup v1 → v2 and db v1 → v2
+    upgrade tests, and an e2e test that creates, edits, deletes, downloads
+    and imports a plan.
+
 ### Manual setup (outside the repository)
 
 1.  Create the Static Web App (Free plan) in the author's Azure subscription,

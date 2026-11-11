@@ -66,6 +66,17 @@ phone keep separate data.
 2. To restore, open the app on any device: Settings > Restore from backup, and pick the file.
    Restoring replaces all data on that device; the app first saves an automatic backup.
 
+## Your own plans and the offline template
+
+On Plans, the "Make your own" card has three actions:
+
+* **Create plan** opens the plan editor (days, machines, sets, reps, set style, target weight).
+* **Download template** saves `workout-plan-template.xlsx`. Fill in the Plans and Exercises
+  sheets in Excel, LibreOffice or Google Sheets. The drop-downs use the Machines sheet (every
+  machine you can pick, with its ID) and the Lists sheet (goals, levels, set styles, muscle groups).
+* **Import plan** reads the filled file, shows a preview, and adds the plans. Errors name the
+  sheet and row. A plan with the same name as one of your plans replaces it. Weights are in kg.
+
 ## Machine photos
 
 The machine photos are copied from brand websites. Therefore:

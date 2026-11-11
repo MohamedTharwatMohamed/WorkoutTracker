@@ -1,5 +1,6 @@
 import type {
   CustomMachine,
+  CustomPlan,
   Iso,
   MachineSettings,
   Measurement,
@@ -21,6 +22,8 @@ export interface BackupData {
   sessions: Session[];
   sets: SetRecord[];
   measurements: Measurement[];
+  /** Added in format version 2. Older files have none. */
+  plans: CustomPlan[];
 }
 
 export interface BackupPhoto {
@@ -52,6 +55,7 @@ export function countsOf(data: BackupData, photos: BackupPhoto[]): BackupCounts 
     sessions: data.sessions.length,
     sets: data.sets.length,
     measurements: data.measurements.length,
+    plans: data.plans?.length ?? 0,
     photos: photos.length,
   };
 }

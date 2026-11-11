@@ -13,6 +13,7 @@ import { SessionScreen } from './screens/SessionScreen';
 import { SettingsScreen, inconsistentSets } from './screens/SettingsScreen';
 import { HomeScreen } from './screens/HomeScreen';
 import { PlanDetailScreen } from './screens/PlanDetailScreen';
+import { PlanEditorScreen } from './screens/PlanEditorScreen';
 import { PlansScreen } from './screens/PlansScreen';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 
@@ -58,7 +59,9 @@ export function AppRoutes() {
         <Route element={<Layout consistencyWarning={inconsistent} />}>
           <Route index element={<HomeScreen />} />
           <Route path="plans" element={<PlansScreen />} />
+          <Route path="plans/new" element={<PlanEditorScreen />} />
           <Route path="plans/:id" element={<PlanDetailScreen />} />
+          <Route path="plans/:id/edit" element={<PlanEditorScreen />} />
           <Route path="session" element={<SessionScreen />} />
           <Route path="machines" element={<MachinesScreen />} />
           <Route path="machines/new" element={<MachineFormScreen />} />

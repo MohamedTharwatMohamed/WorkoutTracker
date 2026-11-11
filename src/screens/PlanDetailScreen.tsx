@@ -7,6 +7,8 @@ import { ConfirmDialog } from '../components/ConfirmDialog';
 import { MachineImage } from '../components/MachineImage';
 import { PageHeader } from '../components/PageHeader';
 import * as machineRepository from '../data/machineRepository';
+import type { MachineView } from '../data/machineRepository';
+import * as planRepository from '../data/planRepository';
 import { getPlan, type Plan, type PlanDay } from '../data/plans';
 import * as routineRepository from '../data/routineRepository';
 import * as sessionRepository from '../data/sessionRepository';
@@ -18,23 +20,26 @@ const routineName = (plan: Plan, day: PlanDay) => (plan.days.length > 1 ? `${pla
 
 export function PlanDetailScreen() {
   const { id = '' } = useParams();
-  const plan = getPlan(id);
   const navigate = useNavigate();
   const [pending, setPending] = useState<{ day: PlanDay; start: boolean } | null>(null);
+  const [deleting, setDeleting] = useState(false);
   const [message, setMessage] = useState<{ text: string; error: boolean } | null>(null);
   const [busy, setBusy] = useState(false);
 
   const data = useLiveQuery(async () => {
-    if (!plan) return null;
+    const plan = getPlan(id) ?? (await planRepository.view(id)) ?? null;
+    if (!plan) return { plan: null, machines: new Map<string, MachineView>(), routine: null, open: null };
     const ids = [...new Set(plan.days.flatMap((d) => d.items.map((i) => i.machineId)))];
     const [machines, routine, open] = await Promise.all([
       machineRepository.getMany(ids),
       routineRepository.peek(),
       sessionRepository.getOpen(),
     ]);
-    return { machines: new Map(machines.map((m) => [m.id, m])), routine: routine ?? null, open: open ?? null };
+    return { plan, machines: new Map(machines.map((m) => [m.id, m])), routine: routine ?? null, open: open ?? null };
   }, [id]);
 
+  if (!data) return null;
+  const { plan } = data;
   if (!plan) {
     return (
       <div className="flex flex-col gap-4">
@@ -45,7 +50,20 @@ export function PlanDetailScreen() {
       </div>
     );
   }
-  if (!data) return null;
+
+  const remove = async () => {
+    setBusy(true);
+    try {
+      await planRepository.remove(plan.id);
+      navigate('/plans');
+    } catch (error) {
+      setDeleting(false);
+      setMessage({ text: strings.common.notSaved, error: true });
+      void logError('plan.delete', error);
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const apply = async (day: PlanDay, start: boolean) => {
     setPending(null);
@@ -80,11 +98,27 @@ export function PlanDetailScreen() {
       <Link to="/plans" className="self-start text-sm font-semibold text-accent">
         ← {strings.plans.back}
       </Link>
-      <PageHeader title={plan.name} tagline={strings.plans.goals[plan.goal]} word={plan.goal} />
+      <PageHeader
+        title={plan.name}
+        tagline={plan.custom ? `${strings.plans.myPlan} · ${strings.plans.goals[plan.goal]}` : strings.plans.goals[plan.goal]}
+        word={plan.goal}
+        actions={
+          plan.custom && (
+            <div className="flex flex-wrap gap-2">
+              <Link to={`/plans/${plan.id}/edit`} className="btn-secondary">
+                {strings.plans.edit}
+              </Link>
+              <button type="button" className="btn-danger" onClick={() => setDeleting(true)}>
+                {strings.plans.delete}
+              </button>
+            </div>
+          )
+        }
+      />
 
       <section className="card relative isolate flex flex-col gap-3 overflow-hidden">
         <Stripes className="absolute top-0 -right-6 -z-10 h-full w-28 -skew-x-[24deg] opacity-20" />
-        <p className="max-w-2xl text-lg">{plan.description}</p>
+        {plan.description && <p className="max-w-2xl text-lg">{plan.description}</p>}
         <PlanMeta plan={plan} />
         <div className="flex flex-wrap gap-1">
           {plan.focus.map((g) => (
@@ -179,6 +213,17 @@ export function PlanDetailScreen() {
         onCancel={() => setPending(null)}
       >
         {strings.plans.replaceText(data.routine?.name ?? '')}
+      </ConfirmDialog>
+      <ConfirmDialog
+        open={deleting}
+        title={strings.plans.deleteTitle}
+        confirmLabel={strings.plans.delete}
+        danger
+        busy={busy}
+        onConfirm={() => void remove()}
+        onCancel={() => setDeleting(false)}
+      >
+        {strings.plans.deleteText(plan.name)}
       </ConfirmDialog>
     </div>
   );
