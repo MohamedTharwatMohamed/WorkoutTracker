@@ -18,6 +18,18 @@ export function errors(): Promise<ErrorEntry[]> {
   return db().errors.orderBy('seq').toArray();
 }
 
+/** Adds an error row and deletes the oldest rows above `keep`. */
+export async function addError(entry: ErrorEntry, keep: number): Promise<void> {
+  const d = db();
+  await d.transaction('rw', d.errors, async () => {
+    await d.errors.add(entry);
+    const excess = (await d.errors.count()) - keep;
+    if (excess > 0) {
+      await d.errors.bulkDelete(await d.errors.orderBy('seq').limit(excess).primaryKeys());
+    }
+  });
+}
+
 export async function allSets(options: ReadOptions = {}): Promise<SetRecord[]> {
   return visible(await db().sets.toArray(), options);
 }

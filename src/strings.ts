@@ -13,6 +13,10 @@ export const strings = {
   },
   tabWarning:
     'You are using the browser tab. Data here is separate from the installed app and the browser may delete it. Install the app and back up often.',
+  backup: {
+    importCancelled: 'Import cancelled: the current data was not exported',
+    notJson: 'The file is not valid JSON',
+  },
   measureHints: {
     weight: 'Morning, after the toilet, before eating, same scale.',
     waist: 'At the navel, relaxed, after breathing out.',
