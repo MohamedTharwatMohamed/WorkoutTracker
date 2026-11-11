@@ -6,9 +6,12 @@ import { openDatabase, type OpenResult } from './db/open';
 import './index.css';
 import { installHandlers } from './platform/errorLog';
 import { captureInstallPrompt } from './platform/install';
+import { applyTheme, watchSystemTheme } from './theme';
 import { DataClearedScreen } from './screens/DataClearedScreen';
 import { RecoveryScreen } from './screens/RecoveryScreen';
 
+applyTheme();
+watchSystemTheme();
 installHandlers();
 captureInstallPrompt();
 // Machine lists wait for the catalog; start the fetch while the database opens.

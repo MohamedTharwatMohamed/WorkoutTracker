@@ -45,7 +45,7 @@ export function MachineImage({
     <div
       role="img"
       aria-label={machine.name}
-      className={`${className} shrink-0 rounded-xl bg-bg p-3 ring-1 ring-white/10`}
+      className={`${className} shrink-0 rounded-xl bg-bg p-3 ring-1 ring-line/10`}
     >
       <div
         className="size-full bg-accent"

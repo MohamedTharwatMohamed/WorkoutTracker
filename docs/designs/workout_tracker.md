@@ -86,9 +86,9 @@ Measured over the first 4 weeks of use by the author and friends:
 *   Merging two devices' data. Import replaces all data on the target device.
     Keeping devices in step is the user's job.
 *   CSV or any export format other than the JSON backup.
-*   Curated goal-based plans and automatic machine substitution.
-*   Body-shape analysis, an animated or 3D before/after body, and analytics
-    beyond one trend line per measurement.
+*   Automatic machine substitution. (Ready-made plans are in scope; see item 54.)
+*   Body-shape analysis and an animated or 3D before/after body. Analytics stay
+    simple: one trend line per measurement, plus the Progress screen (item 54).
 *   Free-weight exercises.
 *   Sharing, friends, leaderboards and any data shared between users.
 *   Alerts while the phone is locked or the app is in the background. This
@@ -199,7 +199,9 @@ Measured over the first 4 weeks of use by the author and friends:
 | Headings font | Oswald (SIL Open Font License), bundled as WOFF2 and precached; system fonts for body text | Author choice. |
 | Muscle-group icons | 6 custom SVGs drawn for this app (chest, back, shoulders, arms, legs, core) | Author choice. |
 | Machine catalog | 30 machines listed in [catalog proposal](../egm/catalog_proposal.md) | Author accepted the proposal. |
-| Charts | Recharts | Author choice. Loaded only on the Body screen (lazy import). |
+| Charts | Recharts | Author choice. Loaded only on the Body and Progress screens (lazy routes). |
+| Anatomical body maps | `react-muscle-highlighter` (MIT), front and back male figures | Author choice in the UX review (P5b). Used for muscle balance, machine pages and the measuring guide. |
+| People photos | Royalty-free photos stored in `public/images/people/`, credited in Settings | Author choice in the UX review: real people, modest clothing. |
 | Tests | Vitest + `fake-indexeddb`, Playwright | Mechanical. |
 | Hosting | Azure Static Web Apps Free, deployed by GitHub Actions from a private repository | Author choice (brief). |
 
@@ -213,10 +215,10 @@ are pure functions with no React or Dexie imports, so they can be unit tested.
 ```mermaid
 flowchart TB
   subgraph UI[React screens]
-    Today[Today / Session]
+    Today[Home / Plans / Session]
     Machines[Machines]
     Routines[Routine]
-    Body[Body]
+    Body[Body / Progress]
     Settings[Settings: backup, diagnostics, about]
   end
   subgraph Domain[Pure domain functions]
@@ -254,11 +256,11 @@ migration.
 
 | Table | Key fields | Notes |
 | --- | --- | --- |
-| `profile` | `id='me'`, `heightCm`, `weightUnit` (kg/lb), `lengthUnit` (cm/in), `defaultRestSec` (90), `deviceId` | One row. |
+| `profile` | `id='me'`, `heightCm`, `weightUnit` (kg/lb), `lengthUnit` (cm/in), `defaultRestSec` (90), `checkInDay?` (0–6, Sunday = 0), `deviceId` | One row. `checkInDay` is the weekly measuring day; absent means off. |
 | `machines` | `id`, `name`, `muscleGroup`, `weightStepKg`, `restSec?`, `photoId?`, `aliases[]` | Custom machines only. `id` is `custom-<uuid>`. |
 | `machineSettings` | `machineId`, `photoId?`, `weightStepKg?`, `restSec?`, `hidden` | User overrides for built-in machines. |
 | `photos` | `id`, `blob` (≤50 KB after resize), `mime` (`image/webp`, or `image/jpeg` where WebP encoding is unavailable) | User photos. |
-| `routines` | `id`, `name`, `items[]: {machineId, targetSets, targetReps, targetWeightKg?}` | One routine in v1 (`id='main'`). The table allows several routines later without a migration. |
+| `routines` | `id`, `name`, `items[]: {machineId, targetSets, targetReps, targetWeightKg?, scheme?}` | One routine in v1 (`id='main'`). The table allows several routines later without a migration. `scheme` is the set style (item 54); absent means straight sets. |
 | `sessions` | `id`, `routineId?`, `state`, `machineOrder[]`, `startedAt?`, `finishedAt?`, `currentMachineId?`, `restStartedAt?`, `restEndsAt?` | At most one open session (`notStarted`, `active` or `resting`). |
 | `sets` | `id`, `sessionId`, `machineId`, `setNumber`, `reps`, `weightKg`, `loggedAt`, `restBeforeSec?` | Indexed by `[machineId+loggedAt]` and `sessionId`. |
 | `measurements` | `id`, `site`, `side?` (left/right), `value`, `takenAt` | Value in kg (weight) or cm. |
@@ -281,7 +283,7 @@ that refers to an unknown machine ID shows as "Unknown machine" and is kept.
 ### Session state machine
 
 States: `notStarted`, `active`, `resting`, `finished`. Opening today's session
-from the Today screen creates it in `notStarted` with a copy of the routine's
+from the Home screen creates it in `notStarted` with a copy of the routine's
 machine list (`machineOrder`). In this state the user can skip, move up or down, or add
 machines, or Discard (soft delete). Start sets `startedAt` and moves to
 `active`. Sets can be saved only in `active` or `resting`. Saving a set moves to
@@ -409,19 +411,22 @@ site has no API, no cookies and no third-party requests.
 
 | Route | Screen |
 | --- | --- |
-| `/` | Today: the routine's machines, Start, open session, backup banner, usage summary. |
-| `/session` | Active session: machine list in routine order (skip, move up or down), set logging, rest timer. |
-| `/machines`, `/machines/:id` | Search and muscle-group filter chips, machine detail, history, photo replace. |
+| `/` | Home dashboard: hero with today's session or Resume, weekly stats (workouts, sets, volume, week streak), Next up machines, Body card with weekly check-in status, muscle balance body map, recent workouts. |
+| `/plans`, `/plans/:id` | Ready-made plans library with Goal and Focus filters; plan detail with days, set styles, Start now and Use as my routine. |
+| `/session` | Active session: machine list in routine order (skip, move up or down), set logging with set-style hints, rest timer. |
+| `/machines`, `/machines/:id` | Search and muscle-group filter chips, machine detail with "Muscles worked" body map, history, photo replace. |
 | `/machines/new`, `/machines/:id/edit` | Custom machine form (`MachineFormScreen`); edit also changes settings of a built-in machine. |
-| `/routine` | Routine editor (the single v1 routine). |
-| `/body` | Measurement entry and trend lines. |
-| `/settings` | Units, height, default rest, backup and restore, storage status, diagnostics, image sources, about. |
+| `/routine` | Routine editor (the single v1 routine), including set style per machine. |
+| `/progress` | Muscle balance (sets per muscle, last 7 days), weekly routine activity and streak, strength trend per machine. |
+| `/body` | Latest values, weekly check-in day, measurement entry with animated measuring guide, trend lines, history. |
+| `/settings` | Appearance (system, light, dark), units, height, default rest, backup and restore, storage status, diagnostics, image and photo sources, about. |
 | `/welcome` | Install guide, "Used this app before?", and onboarding (steps are internal state of `WelcomeScreen`, not separate routes). |
 
 The layout is one column on phones and two columns on wide screens, with a dark
-theme by default, a high-contrast accent colour, tap targets of 48 px or more,
-and no swipe-only actions. All user-facing text lives in one strings module.
-Dates and numbers use `Intl`.
+theme by default and a light theme (item 54), a high-contrast accent colour,
+tap targets of 48 px or more, and no swipe-only actions. All user-facing text
+lives in one strings module. Dates and numbers use `Intl`. The approved visual
+design is described in item 54.
 
 ## Alternatives Considered
 
@@ -544,7 +549,8 @@ command passes locally and in CI.
 | P3 Platform helpers | 38-44, 51 | `npm run lint && npm test` |
 | P4 Catalog, assets and scripts | 10-18, Manual setup 4-5 | `npm run catalog:check && npm run build` |
 | P5 Components and screens | 19-20, 45-46 | `npm run lint && npm test && npm run build` |
-| P6 End-to-end tests and deploy | 52, 53 (deploy and preview jobs), Manual setup 1-3 | `npm run e2e`, then a green PR preview and production smoke step |
+| P5b UX redesign (approved in review with the author) | 54 | `npm run lint && npm test && npm run build && npm run catalog:check` |
+| P6 End-to-end tests and deploy | 52 (covering the P5b screens too), 53 (deploy and preview jobs), Manual setup 1-3 | `npm run e2e`, then a green PR preview and production smoke step |
 
 ### Target Files to Create/Modify
 
@@ -1302,7 +1308,7 @@ command passes locally and in CI.
         `requestPersistence()` and `writeMarker`.
     *   `TodayScreen.tsx`: the routine's machines, "Today's session" (creates
         or opens the `notStarted` session) or Resume, backup banner,
-        usage summary.
+        usage summary. Replaced by `HomeScreen.tsx` in P5b (item 54).
     *   `SessionScreen.tsx`: in `notStarted`, the machine list with skip,
         move up or down, add, Start and Discard; once started, routine
         machines (skip, move up or down, add a machine), `SetRow` list per
@@ -1325,6 +1331,81 @@ command passes locally and in CI.
         (`snapshot.exportSnapshot`), Report problem (export diagnostics).
     *   `DataClearedScreen.tsx`: CUJ 7; Restore from backup or Start fresh
         (`clearMarker()`, then `/welcome`).
+
+#### UX redesign (P5b)
+
+##### 54. Approved visual design and new screens (Create and Modify)
+
+*   **Type / Scope**: The UI/UX agreed with the author in review rounds after
+    P5. It covers every screen, including ones whose data arrives in later
+    stages. Later phases must keep this design.
+*   **Visual identity**:
+    *   Colours and fonts are unchanged: accent `#c6ff00`, Oswald headings,
+        system body text.
+    *   Dark theme by default, plus a light theme. Colours are CSS variables
+        (`--color-bg`, `surface`, `text`, `muted`, `accent`, `ink`, `line`,
+        `muscle`) switched by `data-theme` on `<html>`. In light mode the
+        navigation keeps the dark look (`.dark-scope`) and accent text uses a
+        darker green for contrast.
+    *   Theme choice: System, Light or Dark in Settings → Appearance, and a
+        sun/moon button at the top right of every screen
+        (`ThemeToggle.tsx`). Stored in `localStorage.theme`.
+        `public/theme-init.js` applies it before first paint (the CSP has no
+        inline scripts); `src/theme.ts` holds the same logic for React.
+    *   Fewer empty areas: outlined background words and accent slashes in
+        page headers (`PageHeader.tsx`), diagonal stripes (`Art.tsx`), a
+        daily motivation phrase in the side bar (`motivation.ts`) and real
+        athlete photos (`HeroPhoto`). The Home hero uses the author's photo
+        (`public/images/people/tire-push.webp`); other photos are royalty-free
+        and credited in Settings.
+    *   Machine photos: the 30 catalog photos in `public/images/machines/`.
+*   **Anatomical body maps** (`BodyMap.tsx`, `domain/muscles.ts`): front and
+    back figures from `react-muscle-highlighter`. Target muscles are red
+    (`--color-muscle`): main muscles solid and pulsing, secondary muscles
+    lighter. The library ignores `defaultFill`, so `.body-figure` CSS sets the
+    idle muscle colour per theme.
+*   **Screens and changes**:
+    *   `HomeScreen.tsx` (route `/`, replaces `TodayScreen`): hero with
+        greeting, Today's session or Resume and Browse plans; weekly stats;
+        Next up machines with set-style badges; Body card with latest weight
+        and the check-in status; muscle balance map; recent workouts.
+    *   `PlansScreen.tsx`, `PlanDetailScreen.tsx`, `data/plans.ts`: 8
+        ready-made, machine-only plans filtered by Goal (build muscle, get
+        stronger, tone up, stay healthy) and Focus (muscle group) inside a
+        filter card. Detail shows each day's machines with sets × reps and
+        the set-style strip, a "Set styles in this plan" legend, Start now
+        and Use as my routine (`routineRepository.replace`, with a confirm
+        dialog). v1 has one routine, so a plan copies one day into it.
+    *   `ProgressScreen.tsx`, `domain/progress.ts`: sets per muscle group in
+        the last 7 days against a 10–20 sets/week guide, weekly activity and
+        streak, strength trend per machine.
+    *   `MachineDetailScreen.tsx`: "Muscles worked" card with the body map
+        and a main/also-works legend.
+    *   `BodyScreen.tsx`: latest values, weekly check-in card, entry form
+        with the measuring guide, trends and history.
+    *   `SettingsScreen.tsx`: Appearance section and photo credits.
+    *   All other screens restyled with the same header and cards.
+*   **Set styles** (`db/types.ts` `SetScheme`, `domain/setScheme.ts`,
+    `SetPlan.tsx`): each routine item may have a `scheme`: straight,
+    pyramid, reverse pyramid, top sets + back-off, drop set, or last set to
+    max. `setTargets(item)` returns per-set reps, weight % and flags (steps
+    of 2 reps and about 10%; back-off set at 80% with +4 reps; drop of 20%).
+    Shown as a badge and a bar strip in plans, Home, the routine editor (a
+    "Set style" select) and the session (a hint per set). The weights are
+    guidance only; the weight stepper still prefills from the last set.
+*   **Weekly check-in** (`Profile.checkInDay`, `domain/checkIn.ts`): the user
+    picks a measuring day (or Off) on the Body screen. Status is due,
+    overdue by N days, or done with the next date. A measurement up to 2 days
+    early counts. Home links to `/body#check-in`.
+*   **Measuring guide** (`MeasureGuide.tsx`): when a measurement field is
+    focused, a figure shows an animated tape loop at that site (or a scale
+    under the feet for weight) with the hint and a tip. Animations stop in
+    their final state when reduced motion is on.
+*   **Data and backup**: `scheme` and `checkInDay` are optional fields, so no
+    Dexie migration is needed; the backup validator accepts them.
+*   **Tests**: `plans.test.ts`, `progress.test.ts`, `muscles.test.ts`,
+    `setScheme.test.ts`, `checkIn.test.ts`, and `routineRepository.replace`
+    tests.
 
 #### Tests
 
@@ -1434,8 +1515,14 @@ command passes locally and in CI.
         `localStorage`, reload, data-cleared screen shown, restore from the
         exported file; second case: no marker, "Used this app before?" ->
         Yes -> restore.
+    *   `plans.spec.ts` (P5b): filter plans by goal and focus, open a plan,
+        Use as my routine, check the routine and its set-style badges; Start
+        now opens a session.
+    *   `theme.spec.ts` (P5b): the top-right button switches light and dark
+        mode on any screen, and the choice survives a reload.
     *   `body.spec.ts` (CUJ 8): enter weight and waist, a second entry, trend
-        shown; arm needs a side.
+        shown; arm needs a side; focusing a field changes the measuring
+        guide; setting a check-in day shows the status on Home.
     *   `update.spec.ts` (CUJ 6): builds twice with `APP_BUILD=a vite build
         --outDir dist-a` and `APP_BUILD=b vite build --outDir dist-b`.
         `e2e/support/swapServer.mjs` serves `dist-a` on port 4174 and
@@ -1450,11 +1537,12 @@ command passes locally and in CI.
         `matchMedia('(display-mode: standalone)').matches` true; Playwright
         has no `display-mode` emulation.
 
-    Screens have no unit tests; e2e covers `WelcomeScreen`, `TodayScreen`,
-    `SessionScreen`, `RoutineEditorScreen`, `BodyScreen`,
-    `SettingsScreen` backup and restore, and `DataClearedScreen`.
-    `MachinesScreen`, `MachineDetailScreen`, `MachineFormScreen` and
-    `RecoveryScreen` are checked manually before release.
+    Screens have no unit tests; e2e covers `WelcomeScreen`, `HomeScreen`,
+    `PlansScreen`, `PlanDetailScreen`, `SessionScreen`,
+    `RoutineEditorScreen`, `BodyScreen`, `SettingsScreen` backup and restore,
+    and `DataClearedScreen`. `MachinesScreen`, `MachineDetailScreen`,
+    `MachineFormScreen`, `ProgressScreen` and `RecoveryScreen` are checked
+    manually before release, in both light and dark mode.
 
 #### CI and deployment
 

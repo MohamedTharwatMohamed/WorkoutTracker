@@ -11,11 +11,14 @@ import { MachinesScreen } from './screens/MachinesScreen';
 import { RoutineEditorScreen } from './screens/RoutineEditorScreen';
 import { SessionScreen } from './screens/SessionScreen';
 import { SettingsScreen, inconsistentSets } from './screens/SettingsScreen';
-import { TodayScreen } from './screens/TodayScreen';
+import { HomeScreen } from './screens/HomeScreen';
+import { PlanDetailScreen } from './screens/PlanDetailScreen';
+import { PlansScreen } from './screens/PlansScreen';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 
-// Recharts is only downloaded when the Body screen opens.
+// Recharts is only downloaded when the Body or Progress screen opens.
 const BodyScreen = lazy(() => import('./screens/BodyScreen'));
+const ProgressScreen = lazy(() => import('./screens/ProgressScreen'));
 
 function useProfileRow() {
   return useLiveQuery(async () => (await profileRepository.get()) ?? null, []);
@@ -53,7 +56,9 @@ export function AppRoutes() {
       <Route path="/welcome" element={<WelcomeRoute />} />
       <Route element={<RequireProfile />}>
         <Route element={<Layout consistencyWarning={inconsistent} />}>
-          <Route index element={<TodayScreen />} />
+          <Route index element={<HomeScreen />} />
+          <Route path="plans" element={<PlansScreen />} />
+          <Route path="plans/:id" element={<PlanDetailScreen />} />
           <Route path="session" element={<SessionScreen />} />
           <Route path="machines" element={<MachinesScreen />} />
           <Route path="machines/new" element={<MachineFormScreen />} />
@@ -65,6 +70,14 @@ export function AppRoutes() {
             element={
               <Suspense fallback={null}>
                 <BodyScreen />
+              </Suspense>
+            }
+          />
+          <Route
+            path="progress"
+            element={
+              <Suspense fallback={null}>
+                <ProgressScreen />
               </Suspense>
             }
           />

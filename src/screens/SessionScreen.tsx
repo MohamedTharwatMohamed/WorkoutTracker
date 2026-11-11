@@ -1,3 +1,5 @@
+import { SchemeBadge, setHint } from '../components/SetPlan';
+import { setTargets, targetForSet } from '../domain/setScheme';
 import { useCallback, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Link, useNavigate } from 'react-router';
@@ -23,6 +25,7 @@ import { stepKgFor } from '../domain/units';
 import { formatDuration } from '../format';
 import { logError } from '../platform/errorLog';
 import { useWakeLock } from '../platform/wakeLock';
+import { motivationOfDay } from '../motivation';
 import { strings } from '../strings';
 
 export const DEFAULT_TARGET_SETS = 3;
@@ -158,8 +161,14 @@ function OpenSession({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-2">
-        <h1 className="heading">{strings.session.title}</h1>
+      <div className="relative isolate flex items-end justify-between gap-2 overflow-hidden pb-2">
+        <span aria-hidden className="text-outline absolute -top-2 right-28 -z-10 font-display text-7xl leading-none font-bold whitespace-nowrap uppercase">
+          {motivationOfDay()}
+        </span>
+        <div>
+          <h1 className="heading text-4xl">{strings.session.title}</h1>
+          <div aria-hidden className="slash mt-2" />
+        </div>
         {started ? (
           <button type="button" className="btn-secondary" onClick={() => setConfirm('finish')}>
             {strings.session.finish}
@@ -282,6 +291,11 @@ function MachineCard({
   const [extra, setExtra] = useState(0);
   const { machine, target, sets } = entry;
   const targetSets = target?.targetSets ?? DEFAULT_TARGET_SETS;
+  const plan = target ? setTargets(target) : [];
+  const hintFor = (n: number) => {
+    const t = target && targetForSet(plan, n);
+    return t ? setHint(t, target, profile.weightUnit) : undefined;
+  };
   const started = session.state !== 'notStarted';
   const drafts = Math.max(targetSets - sets.length, 0) + extra;
   const nextNumber = Math.max(0, ...sets.map((s) => s.setNumber)) + 1;
@@ -325,7 +339,8 @@ function MachineCard({
           <span className="flex-1">
             <span className="block font-semibold">{machine.name}</span>
             <span className="block font-display text-lg tabular-nums text-muted">
-              {strings.session.setsDone(sets.length, targetSets)}
+              {strings.session.setsDone(sets.length, targetSets)}{' '}
+              {target && <SchemeBadge item={target} />}
             </span>
           </span>
         </button>
@@ -366,6 +381,7 @@ function MachineCard({
               key={`draft-${nextNumber}`}
               setNumber={nextNumber}
               initial={prefill({ setNumber: nextNumber, thisSession: sets, lastSession: entry.lastSession, target })}
+              hint={hintFor(nextNumber)}
               weightUnit={profile.weightUnit}
               stepKg={stepKg}
               canSave
@@ -373,8 +389,9 @@ function MachineCard({
             />
           )}
           {Array.from({ length: Math.max(drafts - 1, 0) }, (_, i) => (
-            <li key={`later-${i}`} className="rounded-xl p-3 font-display text-lg text-muted ring-1 ring-white/5">
+            <li key={`later-${i}`} className="rounded-xl p-3 font-display text-lg text-muted ring-1 ring-line/5">
               {strings.session.set} {nextNumber + i + 1}
+              {hintFor(nextNumber + i + 1) && <span className="ml-3 font-sans text-sm">{hintFor(nextNumber + i + 1)}</span>}
             </li>
           ))}
           <li>

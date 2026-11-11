@@ -23,6 +23,7 @@ export function SetRow({
   canSave,
   onSave,
   onDelete,
+  hint,
 }: {
   setNumber: number;
   saved?: SetRecord;
@@ -32,6 +33,8 @@ export function SetRow({
   canSave: boolean;
   onSave: (reps: number, weightKg: number) => Promise<void>;
   onDelete?: () => void;
+  /** Planned target for this set, from the routine's set style. */
+  hint?: string;
 }) {
   const start: Values = saved
     ? { reps: saved.reps, weightKg: saved.weightKg }
@@ -88,9 +91,10 @@ export function SetRow({
   };
 
   return (
-    <li className="rounded-xl bg-bg/60 p-3 ring-1 ring-white/10">
-      <div className="mb-2 font-display text-lg">
+    <li className="rounded-xl bg-bg/60 p-3 ring-1 ring-line/10">
+      <div className="mb-2 flex flex-wrap items-baseline gap-x-3 font-display text-lg">
         {strings.session.set} {setNumber}
+        {hint && <span className="font-sans text-sm font-semibold text-accent">{hint}</span>}
       </div>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Stepper

@@ -1,6 +1,8 @@
+import { PHOTOS } from '../components/Art';
 import { useEffect, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { BackupButton, RestoreButton } from '../components/Backup';
+import { PageHeader } from '../components/PageHeader';
 import { useProfile } from '../components/profileContext';
 import { APP_BUILD, BACKUP_FORMAT_VERSION, BUILD_TIME, SCHEMA_VERSION } from '../buildInfo';
 import { loadCatalog, type Catalog } from '../data/catalog';
@@ -15,6 +17,7 @@ import { exportDiagnostics } from '../platform/diagnostics';
 import { logError } from '../platform/errorLog';
 import { requestPersistence, status } from '../platform/storage';
 import { strings } from '../strings';
+import { THEME_CHOICES, setTheme, useTheme } from '../theme';
 import { Segmented } from './WelcomeScreen';
 
 export const REST_STEP_SEC = 15;
@@ -48,6 +51,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 
 export function SettingsScreen() {
   const profile = useProfile();
+  const theme = useTheme();
   // null while not editing, so the field follows the saved profile.
   const [heightDraft, setHeight] = useState<string | null>(null);
   const height =
@@ -91,7 +95,13 @@ export function SettingsScreen() {
 
   return (
     <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-start">
-      <h1 className="heading lg:col-span-2">{strings.settings.title}</h1>
+      <div className="lg:col-span-2">
+        <PageHeader title={strings.settings.title} tagline={strings.settings.tagline} word="Setup" />
+      </div>
+
+      <Section title={strings.settings.appearance}>
+        <Segmented label={strings.settings.theme} value={theme} options={THEME_CHOICES} labels={strings.settings.themes} onChange={setTheme} />
+      </Section>
 
       <Section title={strings.settings.units}>
         <Segmented label={strings.settings.weightUnit} value={profile.weightUnit} options={['kg', 'lb'] as const} onChange={(weightUnit) => update({ weightUnit })} />
@@ -168,6 +178,21 @@ export function SettingsScreen() {
             ))}
           </ul>
         )}
+        <ul className="mt-2 flex flex-col gap-1 text-sm">
+          {Object.values(PHOTOS).map((p: { src: string; credit: string; url?: string }) => (
+            <li key={p.src}>
+              {strings.settings.photoBy(p.credit)}
+              {p.url && (
+                <>
+                  :{' '}
+                  <a href={p.url} className="text-accent underline" target="_blank" rel="noreferrer">
+                    {p.url}
+                  </a>
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
       </Section>
 
       <Section title={strings.settings.about}>

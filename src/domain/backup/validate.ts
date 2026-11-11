@@ -1,4 +1,4 @@
-import { MUSCLE_GROUPS, SIDED_SITES, SITES } from '../../db/types';
+import { MUSCLE_GROUPS, SET_SCHEMES, SIDED_SITES, SITES } from '../../db/types';
 import { checksum } from './build';
 import {
   BACKUP_FORMAT,
@@ -48,6 +48,7 @@ const checks: Record<keyof Omit<BackupData, 'profile'> | 'profile', Check[]> = {
       weightUnit: (v) => v === 'kg' || v === 'lb',
       lengthUnit: (v) => v === 'cm' || v === 'in',
       defaultRestSec: isNonNeg,
+      checkInDay: (v) => optional(v, (d) => Number.isInteger(d) && (d as number) >= 0 && (d as number) <= 6),
     }),
   ],
   machines: [
@@ -84,7 +85,8 @@ const checks: Record<keyof Omit<BackupData, 'profile'> | 'profile', Check[]> = {
             isStr(i.machineId) &&
             isNonNeg(i.targetSets) &&
             isNonNeg(i.targetReps) &&
-            optional(i.targetWeightKg, isNonNeg),
+            optional(i.targetWeightKg, isNonNeg) &&
+            optional(i.scheme, (s) => SET_SCHEMES.includes(s as never)),
         ),
     }),
   ],

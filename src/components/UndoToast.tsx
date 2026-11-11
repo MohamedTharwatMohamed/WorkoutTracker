@@ -48,7 +48,7 @@ export function UndoProvider({ children }: { children: ReactNode }) {
       {toast && (
         <div
           role="status"
-          className="fixed inset-x-4 bottom-24 z-40 mx-auto flex max-w-md items-center justify-between gap-3 rounded-2xl bg-text p-2 pl-4 text-bg shadow-xl lg:bottom-6"
+          className="fixed inset-x-4 bottom-24 z-40 mx-auto flex max-w-md items-center justify-between gap-3 rounded-2xl bg-text p-2 pl-4 text-ink shadow-xl lg:bottom-6"
         >
           <span className="font-semibold">{toast.message}</span>
           <button type="button" className="btn bg-bg text-accent" onClick={() => void undo()}>

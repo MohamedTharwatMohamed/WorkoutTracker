@@ -24,6 +24,8 @@ export interface Profile extends BaseRecord {
   weightUnit: 'kg' | 'lb';
   lengthUnit: 'cm' | 'in';
   defaultRestSec: number;
+  /** Weekly measurement day, 0 = Sunday … 6 = Saturday. Absent means no schedule. */
+  checkInDay?: number;
 }
 
 export interface CustomMachine extends BaseRecord {
@@ -52,11 +54,17 @@ export interface Photo extends BaseRecord {
   mime: PhotoMime;
 }
 
+/** How the sets of one exercise relate to each other (see domain/setScheme). */
+export type SetScheme = 'straight' | 'pyramid' | 'reversePyramid' | 'topSets' | 'dropSet' | 'lastMax';
+export const SET_SCHEMES: readonly SetScheme[] = ['straight', 'pyramid', 'reversePyramid', 'topSets', 'dropSet', 'lastMax'];
+
 export interface RoutineItem {
   machineId: string;
   targetSets: number;
   targetReps: number;
   targetWeightKg?: number;
+  /** Absent means 'straight'. */
+  scheme?: SetScheme;
 }
 
 export interface Routine extends BaseRecord {

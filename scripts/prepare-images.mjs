@@ -2,7 +2,7 @@
 // Name each original after its catalog ID, for example technogym-selection-900-chest-press.jpg.
 // Crop out any brand logo before running. Output: public/images/machines/<id>.webp, at most
 // 640 px on the longest side and 50 KB, with metadata removed.
-import { mkdirSync, readdirSync, readFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { basename, dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
@@ -50,7 +50,8 @@ for (const file of files) {
     failed = true;
     continue;
   }
-  await sharp(output.buffer).toFile(join(outDir, `${id}.webp`));
+  // Write the checked bytes; re-encoding here could exceed the size limit.
+  writeFileSync(join(outDir, `${id}.webp`), output.buffer);
   console.log(`ok   ${id}.webp  ${output.buffer.length} bytes  q${output.quality}`);
 }
 console.log('Then set "image" and "imageSourceUrl" for each machine in public/catalog/catalog.json.');

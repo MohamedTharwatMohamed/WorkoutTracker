@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { Link } from 'react-router';
 import { MachineImage } from '../components/MachineImage';
 import { MachinePicker } from '../components/MachinePicker';
+import { PageHeader } from '../components/PageHeader';
+import { SetTargetsStrip } from '../components/SetPlan';
 import { CountStepper, WeightStepper } from '../components/Stepper';
 import { useProfile } from '../components/profileContext';
 import * as machineRepository from '../data/machineRepository';
 import * as routineRepository from '../data/routineRepository';
-import type { RoutineItem } from '../data/types';
+import { SET_SCHEMES, type RoutineItem, type SetScheme } from '../data/types';
 import { stepKgFor } from '../domain/units';
 import { logError } from '../platform/errorLog';
 import { strings } from '../strings';
@@ -19,6 +22,7 @@ async function updateItem(machineId: string, patch: Partial<RoutineItem>): Promi
     if (item.machineId !== machineId) return item;
     const updated = { ...item, ...patch };
     if ('targetWeightKg' in patch && patch.targetWeightKg === undefined) delete updated.targetWeightKg;
+    if ('scheme' in patch && patch.scheme === undefined) delete updated.scheme;
     return updated;
   });
   await routineRepository.save({ ...routine, items });
@@ -40,7 +44,7 @@ export function RoutineEditorScreen() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="heading">{strings.routine.title}</h1>
+      <PageHeader title={strings.routine.title} tagline={strings.routine.tagline} word="Plan" actions={<Link to="/plans" className="btn-secondary">{strings.home.browsePlans}</Link>} />
       {data.length === 0 && <p className="text-muted">{strings.routine.empty}</p>}
       <ol className="grid gap-3 lg:grid-cols-2">
         {data.map(({ item, machine }, index) => {
@@ -64,6 +68,27 @@ export function RoutineEditorScreen() {
               <div className="grid grid-cols-2 gap-3">
                 <CountStepper label={strings.routine.targetSets} value={item.targetSets} min={1} onChange={(targetSets) => run('routine.update', () => updateItem(item.machineId, { targetSets }))} />
                 <CountStepper label={strings.routine.targetReps} value={item.targetReps} min={1} onChange={(targetReps) => run('routine.update', () => updateItem(item.machineId, { targetReps }))} />
+              </div>
+              <label className="flex flex-col gap-1 text-sm">
+                <span className="text-muted">{strings.routine.scheme}</span>
+                <select
+                  className="field"
+                  value={item.scheme ?? 'straight'}
+                  onChange={(e) => {
+                    const scheme = e.target.value as SetScheme;
+                    run('routine.update', () => updateItem(item.machineId, { scheme: scheme === 'straight' ? undefined : scheme }));
+                  }}
+                >
+                  {SET_SCHEMES.map((s) => (
+                    <option key={s} value={s}>
+                      {strings.schemes[s].name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <div className="flex items-end gap-3">
+                <p className="flex-1 text-xs text-muted">{strings.schemes[item.scheme ?? 'straight'].how}</p>
+                <SetTargetsStrip item={item} />
               </div>
               <WeightStepper
                 label={strings.routine.targetWeight}

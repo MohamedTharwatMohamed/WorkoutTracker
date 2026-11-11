@@ -45,7 +45,7 @@ export function Stepper({
         </button>
         <button
           type="button"
-          className="btn min-w-16 flex-1 bg-bg font-display text-2xl tabular-nums ring-1 ring-white/10"
+          className="btn min-w-16 flex-1 bg-bg font-display text-2xl tabular-nums ring-1 ring-line/10"
           aria-label={`${label}: ${display}`}
           onClick={() => setKeypad(true)}
           disabled={disabled}

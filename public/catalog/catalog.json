@@ -22,8 +22,8 @@
       "note": "Pressing on a fixed path builds the chest without balancing a bar.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/technogym-selection-900-chest-press.webp",
+      "imageSourceUrl": "https://www.technogym.com",
       "aliases": [
         "chest press",
         "seated chest press"
@@ -42,8 +42,8 @@
       "note": "Facing in works the chest; facing out with the handles reversed works the rear shoulders.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/life-fitness-insignia-pectoral-fly-rear-deltoid.webp",
+      "imageSourceUrl": "https://www.lifefitness.com",
       "aliases": [
         "pec fly",
         "pec deck",
@@ -64,8 +64,8 @@
       "note": "Each arm moves on its own path, so the stronger side cannot take over. Targets the upper chest.",
       "weightStepKg": 2.5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/hammer-strength-plate-loaded-iso-lateral-incline-press.webp",
+      "imageSourceUrl": "https://www.lifefitness.com/en-us/brands/hammer-strength",
       "aliases": [
         "incline press",
         "incline chest press"
@@ -85,8 +85,8 @@
       "note": "The arms move inwards as you press, following the natural line of the chest.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/matrix-versa-converging-chest-press.webp",
+      "imageSourceUrl": "https://www.matrixfitness.com",
       "aliases": [
         "chest press",
         "converging press"
@@ -105,8 +105,8 @@
       "note": "Pull the bar to the upper chest with the thighs held under the pads.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/technogym-selection-900-lat-machine.webp",
+      "imageSourceUrl": "https://www.technogym.com",
       "aliases": [
         "lat pulldown",
         "pulldown"
@@ -126,8 +126,8 @@
       "note": "Chest stays on the pad, so the lower back is supported while you row.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/technogym-selection-900-low-row.webp",
+      "imageSourceUrl": "https://www.technogym.com",
       "aliases": [
         "seated row",
         "low row"
@@ -146,8 +146,8 @@
       "note": "Each arm pulls on its own path in front of the body.",
       "weightStepKg": 2.5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/hammer-strength-plate-loaded-iso-lateral-front-lat-pulldown.webp",
+      "imageSourceUrl": "https://www.lifefitness.com/en-us/brands/hammer-strength",
       "aliases": [
         "lat pulldown",
         "front pulldown"
@@ -167,8 +167,8 @@
       "note": "Chest-supported row with independent arms for the middle back.",
       "weightStepKg": 2.5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/hammer-strength-plate-loaded-iso-lateral-row.webp",
+      "imageSourceUrl": "https://www.lifefitness.com/en-us/brands/hammer-strength",
       "aliases": [
         "row",
         "chest supported row"
@@ -188,8 +188,8 @@
       "note": "The handles move apart as you pull, squeezing the shoulder blades together.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/matrix-versa-diverging-seated-row.webp",
+      "imageSourceUrl": "https://www.matrixfitness.com",
       "aliases": [
         "seated row",
         "row"
@@ -208,8 +208,8 @@
       "note": "Press overhead with the back on the pad, without balancing weights above the head.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/technogym-selection-900-shoulder-press.webp",
+      "imageSourceUrl": "https://www.technogym.com",
       "aliases": [
         "shoulder press",
         "overhead press"
@@ -228,8 +228,8 @@
       "note": "Each arm presses on its own path overhead.",
       "weightStepKg": 2.5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/hammer-strength-plate-loaded-iso-lateral-shoulder-press.webp",
+      "imageSourceUrl": "https://www.lifefitness.com/en-us/brands/hammer-strength",
       "aliases": [
         "shoulder press",
         "overhead press"
@@ -248,8 +248,8 @@
       "note": "Arms move out to the sides on a fixed arc to work the rear shoulders.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/technogym-selection-900-reverse-fly.webp",
+      "imageSourceUrl": "https://www.technogym.com",
       "aliases": [
         "rear delt",
         "reverse pec deck"
@@ -268,8 +268,8 @@
       "note": "Upper arms rest on the pad so the curl is strict.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/life-fitness-insignia-biceps-curl.webp",
+      "imageSourceUrl": "https://www.lifefitness.com",
       "aliases": [
         "bicep curl",
         "arm curl",
@@ -289,8 +289,8 @@
       "note": "Upper arms rest on the pad so the curl is strict.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/technogym-selection-900-arm-curl.webp",
+      "imageSourceUrl": "https://www.technogym.com",
       "aliases": [
         "bicep curl",
         "arm curl"
@@ -307,8 +307,8 @@
       "note": "Elbows rest on the pad while the forearms push the handles down and out.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/life-fitness-insignia-triceps-extension.webp",
+      "imageSourceUrl": "https://www.lifefitness.com",
       "aliases": [
         "tricep extension"
       ],
@@ -326,8 +326,8 @@
       "note": "Seated dip movement on a fixed path, without lifting body weight.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/matrix-versa-triceps-press.webp",
+      "imageSourceUrl": "https://www.matrixfitness.com",
       "aliases": [
         "dip",
         "seated dip",
@@ -349,8 +349,8 @@
       "note": "Back stays on the seat while the legs press the platform away.",
       "weightStepKg": 10,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/technogym-selection-900-leg-press.webp",
+      "imageSourceUrl": "https://www.technogym.com",
       "aliases": [
         "leg press",
         "seated leg press"
@@ -370,8 +370,8 @@
       "note": "The sled moves on rails at an angle, with the back supported.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/hammer-strength-plate-loaded-linear-leg-press.webp",
+      "imageSourceUrl": "https://www.lifefitness.com/en-us/brands/hammer-strength",
       "aliases": [
         "leg press",
         "45 degree leg press"
@@ -390,8 +390,8 @@
       "note": "Squat on a fixed track with back and shoulders on the pads. Choose a depth that feels safe for your knees and lower back.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/hammer-strength-plate-loaded-hack-squat.webp",
+      "imageSourceUrl": "https://www.lifefitness.com/en-us/brands/hammer-strength",
       "aliases": [
         "hack squat",
         "squat machine"
@@ -408,8 +408,8 @@
       "note": "Straightens the knee against a pad on the shins to work the front of the thighs.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/life-fitness-insignia-leg-extension.webp",
+      "imageSourceUrl": "https://www.lifefitness.com",
       "aliases": [
         "leg extension",
         "quad extension"
@@ -426,8 +426,8 @@
       "note": "Straightens the knee against a pad on the shins to work the front of the thighs.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/matrix-versa-leg-extension.webp",
+      "imageSourceUrl": "https://www.matrixfitness.com",
       "aliases": [
         "leg extension",
         "quad extension"
@@ -446,8 +446,8 @@
       "note": "Bends the knee while seated, with the thighs held down by a pad.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/life-fitness-insignia-seated-leg-curl.webp",
+      "imageSourceUrl": "https://www.lifefitness.com",
       "aliases": [
         "leg curl",
         "hamstring curl"
@@ -467,8 +467,8 @@
       "note": "Lying face down, bend the knees to work the hamstrings.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/technogym-selection-900-prone-leg-curl.webp",
+      "imageSourceUrl": "https://www.technogym.com",
       "aliases": [
         "lying leg curl",
         "hamstring curl"
@@ -487,8 +487,8 @@
       "note": "Pushes the knees apart against pads to work the outer hips.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/technogym-selection-900-abductor.webp",
+      "imageSourceUrl": "https://www.technogym.com",
       "aliases": [
         "hip abduction",
         "outer thigh"
@@ -505,8 +505,8 @@
       "note": "Squeezes the knees together against pads to work the inner thighs.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/technogym-selection-900-adductor.webp",
+      "imageSourceUrl": "https://www.technogym.com",
       "aliases": [
         "hip adduction",
         "inner thigh"
@@ -525,8 +525,8 @@
       "note": "Pushes one leg back on a fixed path to work the glutes.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/matrix-versa-glute.webp",
+      "imageSourceUrl": "https://www.matrixfitness.com",
       "aliases": [
         "glute kickback",
         "glute machine"
@@ -543,8 +543,8 @@
       "note": "Pushes through the balls of the feet to work the calves.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/life-fitness-insignia-calf-extension.webp",
+      "imageSourceUrl": "https://www.lifefitness.com",
       "aliases": [
         "calf raise",
         "calf press"
@@ -561,8 +561,8 @@
       "note": "Curls the upper body forward against resistance, with the back supported.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/technogym-selection-900-abdominal-crunch.webp",
+      "imageSourceUrl": "https://www.technogym.com",
       "aliases": [
         "ab crunch",
         "crunch machine"
@@ -579,8 +579,8 @@
       "note": "Curls the upper body forward against resistance, with the back supported.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/matrix-versa-abdominal.webp",
+      "imageSourceUrl": "https://www.matrixfitness.com",
       "aliases": [
         "ab crunch",
         "crunch machine"
@@ -599,8 +599,8 @@
       "note": "Extends the back against a pad while seated, strengthening the lower back.",
       "weightStepKg": 5,
       "defaultRestSec": null,
-      "image": null,
-      "imageSourceUrl": null,
+      "image": "/images/machines/life-fitness-insignia-back-extension.webp",
+      "imageSourceUrl": "https://www.lifefitness.com",
       "aliases": [
         "lower back",
         "back extension"

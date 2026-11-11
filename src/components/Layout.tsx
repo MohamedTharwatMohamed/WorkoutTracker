@@ -6,6 +6,7 @@ import { BackupBanner } from './BackupBanner';
 import { Banner } from './Banner';
 import { NavBar } from './NavBar';
 import { TabWarningBanner, shouldWarnTab } from './TabWarningBanner';
+import { ThemeToggle } from './ThemeToggle';
 import { UndoProvider } from './UndoToast';
 import { UpdateBanner } from './UpdateBanner';
 
@@ -37,6 +38,9 @@ export function Layout({ consistencyWarning = false }: { consistencyWarning?: bo
     <UndoProvider>
       <NavBar />
       <div className="mx-auto max-w-6xl px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-28 lg:pb-10 lg:pl-60">
+        <div className="mb-2 flex justify-end">
+          <ThemeToggle />
+        </div>
         <div className="mb-4 flex flex-col gap-2 empty:hidden">
           <DbAlertBanner />
           {warnTab && <TabWarningBanner />}

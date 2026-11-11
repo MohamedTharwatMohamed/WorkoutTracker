@@ -13,8 +13,11 @@
   --color-text: #f2f4f7;
   --color-muted: #9aa3ae;
   --color-accent: #c6ff00;
+  --color-ink: #0b0d10;
+  --color-line: #ffffff;
   --color-success: #22c55e;
   --color-danger: #ef4444;
+  --color-muscle: #ff3b30;
   --font-display: "Oswald", system-ui, sans-serif;
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
@@ -24,6 +27,39 @@
   min-height: 48px;
 }
 
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-bg: #eef1f5;
+  --color-surface: #ffffff;
+  --color-text: #0b0d10;
+  --color-muted: #5b6573;
+  --color-accent: #b8f000;
+  --color-line: #0b0d10;
+  --accent-text: #3d6a00;
+  --color-muscle: #dc2626;
+}
+
+/* The navigation keeps the dark sporty look in light mode too. */
+:root[data-theme="light"] .dark-scope {
+  color-scheme: dark;
+  --color-bg: #0b0d10;
+  --color-surface: #161a20;
+  --color-text: #f2f4f7;
+  --color-muted: #9aa3ae;
+  --color-accent: #c6ff00;
+  --color-line: #ffffff;
+  --accent-text: #c6ff00;
+  color: var(--color-text);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] .text-accent {
+  color: var(--accent-text);
+}
+
 html,
 body {
   background-color: var(--color-bg);
@@ -31,16 +67,49 @@ body {
   font-family: var(--font-sans);
 }
 
+body {
+  background-image:
+    radial-gradient(60rem 30rem at 100% -10%, color-mix(in srgb, var(--color-accent) 8%, transparent), transparent 60%),
+    repeating-linear-gradient(135deg, color-mix(in srgb, var(--color-line) 2.5%, transparent) 0 1px, transparent 1px 26px);
+  background-attachment: fixed;
+}
+
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in srgb, var(--color-line) 8%, transparent);
+}
+
+@utility text-outline-strong {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgb(198 255 0 / 0.35);
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+}
+
+@utility stripes {
+  background-image: repeating-linear-gradient(-45deg, var(--color-accent) 0 2px, transparent 2px 12px);
+}
+
+@utility slash {
+  @apply h-1.5 w-20 -skew-x-[24deg] bg-accent;
+}
+
+@utility edge {
+  @apply relative overflow-hidden before:absolute before:inset-y-0 before:left-0 before:w-1 before:bg-accent;
+}
+
 @utility btn {
   @apply inline-flex min-h-12 min-w-12 items-center justify-center gap-2 rounded-xl px-4 font-semibold transition select-none active:scale-[0.97] disabled:opacity-40;
 }
 
 @utility btn-primary {
-  @apply btn bg-accent text-bg uppercase tracking-wide font-display text-lg;
+  @apply btn bg-accent text-ink uppercase tracking-wide font-display text-lg;
 }
 
 @utility btn-secondary {
-  @apply btn bg-surface text-text ring-1 ring-white/10;
+  @apply btn bg-surface text-text ring-1 ring-line/10;
 }
 
 @utility btn-danger {
@@ -48,19 +117,19 @@ body {
 }
 
 @utility btn-icon {
-  @apply btn px-0 bg-surface text-text ring-1 ring-white/10 text-xl;
+  @apply btn px-0 bg-surface text-text ring-1 ring-line/10 text-xl;
 }
 
 @utility card {
-  @apply rounded-2xl bg-surface p-4 ring-1 ring-white/5;
+  @apply rounded-2xl bg-surface p-4 ring-1 ring-line/5;
 }
 
 @utility chip {
-  @apply inline-flex min-h-12 items-center rounded-full px-4 text-sm font-semibold ring-1 ring-white/15;
+  @apply inline-flex min-h-12 items-center rounded-full px-4 text-sm font-semibold ring-1 ring-line/15;
 }
 
 @utility field {
-  @apply min-h-12 w-full rounded-xl bg-bg px-3 text-text ring-1 ring-white/15 outline-none focus:ring-2 focus:ring-accent;
+  @apply min-h-12 w-full rounded-xl bg-bg px-3 text-text ring-1 ring-line/15 outline-none focus:ring-2 focus:ring-accent;
 }
 
 @utility heading {
@@ -69,4 +138,53 @@ body {
 
 @utility subheading {
   @apply font-display text-xl font-medium uppercase tracking-wide text-muted;
+}
+
+/* react-muscle-highlighter ignores defaultFill and paints idle muscles #3f3f3f. */
+.body-figure path[fill='#3f3f3f'] {
+  fill: #2a313b;
+}
+:root[data-theme='light'] .body-figure path[fill='#3f3f3f'] {
+  fill: #c9d0d9;
+}
+
+@keyframes muscle-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@keyframes tape-wrap {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  55%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes tape-glow {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes scale-press {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
 }

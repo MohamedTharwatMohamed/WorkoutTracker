@@ -18,11 +18,13 @@ export function Segmented<T extends string>({
   value,
   options,
   onChange,
+  labels,
 }: {
   label: string;
   value: T;
   options: readonly T[];
   onChange: (value: T) => void;
+  labels?: Record<T, string>;
 }) {
   return (
     <fieldset className="flex flex-col gap-1">
@@ -33,10 +35,10 @@ export function Segmented<T extends string>({
             key={option}
             type="button"
             aria-pressed={value === option}
-            className={`chip flex-1 justify-center ${value === option ? 'bg-accent text-bg ring-accent' : ''}`}
+            className={`chip flex-1 justify-center ${value === option ? 'bg-accent text-ink ring-accent' : ''}`}
             onClick={() => onChange(option)}
           >
-            {option}
+            {labels?.[option] ?? option}
           </button>
         ))}
       </div>

@@ -33,4 +33,12 @@ describe('routineRepository', () => {
     await routineRepository.removeItem('b');
     expect(await ids()).toEqual(['a', 'c']);
   });
+
+  it('replaces the routine name and items', async () => {
+    await routineRepository.addItem(item('old'));
+    await routineRepository.replace('Push · Pull · Legs: Push', [item('a'), item('b')]);
+    const r = await routineRepository.get();
+    expect(r.name).toBe('Push · Pull · Legs: Push');
+    expect(r.items.map((i) => i.machineId)).toEqual(['a', 'b']);
+  });
 });

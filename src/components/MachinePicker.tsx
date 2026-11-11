@@ -13,7 +13,7 @@ export function MuscleChips({
   onChange: (group: MuscleGroup | undefined) => void;
 }) {
   const chip = (active: boolean) =>
-    `chip shrink-0 ${active ? 'bg-accent text-bg ring-accent' : 'text-text'}`;
+    `chip shrink-0 ${active ? 'bg-accent text-ink ring-accent' : 'text-text'}`;
   return (
     <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
       <button type="button" className={chip(value === undefined)} onClick={() => onChange(undefined)}>
@@ -57,7 +57,7 @@ export function MachinePicker({
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-bg" role="dialog" aria-modal="true" aria-label={strings.machines.pickTitle}>
-      <div className="flex flex-col gap-3 border-b border-white/10 p-4 pt-[max(1rem,env(safe-area-inset-top))]">
+      <div className="flex flex-col gap-3 border-b border-line/10 p-4 pt-[max(1rem,env(safe-area-inset-top))]">
         <div className="flex items-center justify-between">
           <h2 className="heading text-2xl">{strings.machines.pickTitle}</h2>
           <button type="button" className="btn-secondary" onClick={onClose}>

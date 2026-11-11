@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Link, useParams } from 'react-router';
+import { BodyMap } from '../components/BodyMap';
 import { MachineImage } from '../components/MachineImage';
 import { useProfile } from '../components/profileContext';
 import * as machineRepository from '../data/machineRepository';
@@ -8,6 +9,7 @@ import * as photoRepository from '../data/photoRepository';
 import * as routineRepository from '../data/routineRepository';
 import * as setRepository from '../data/setRepository';
 import type { SetRecord } from '../data/types';
+import { machineMuscles } from '../domain/muscles';
 import { restLengthFor } from '../domain/restTimer';
 import { stepKgFor } from '../domain/units';
 import { formatDate, formatWeight } from '../format';
@@ -70,6 +72,7 @@ export function MachineDetailScreen() {
   const step = stepKgFor({ ownStepKg: machine.ownStepKg, catalogStepKg: machine.weightStepKg }, profile.weightUnit);
   const rest = restLengthFor(machine, profile);
   const ownRest = machine.settingsRestSec ?? machine.customRestSec;
+  const muscles = machineMuscles(machine);
 
   return (
     <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-start">
@@ -77,22 +80,18 @@ export function MachineDetailScreen() {
         <Link to="/machines" className="text-sm text-muted">
           ← {strings.machines.title}
         </Link>
-        <div className="flex items-start gap-4">
-          <MachineImage machine={machine} className="size-28" />
-          <div className="flex-1">
-            <h1 className="heading text-2xl">{machine.name}</h1>
-            <p className="text-muted">
-              {[machine.brand, machine.line].filter(Boolean).join(' · ')}
-            </p>
-            <p className="mt-1 font-semibold text-accent">{strings.muscleGroups[machine.muscleGroup]}</p>
-          </div>
+        <div className="relative -mx-4 overflow-hidden">
+          <MachineImage machine={machine} className="aspect-[4/3] max-h-80 w-full rounded-none!" />
+          <span className="absolute bottom-3 left-0 -skew-x-12 bg-accent px-4 py-1 font-display text-lg font-semibold uppercase text-ink">
+            {strings.muscleGroups[machine.muscleGroup]}
+          </span>
         </div>
-        {machine.secondaryMuscles.length > 0 && (
-          <p className="text-sm">
-            <span className="text-muted">{strings.machineDetail.secondary}: </span>
-            {machine.secondaryMuscles.join(', ')}
-          </p>
-        )}
+        <div>
+          <h1 className="heading text-3xl">{machine.name}</h1>
+          <div className="slash mt-2" />
+          <p className="mt-2 text-muted">{[machine.brand, machine.line].filter(Boolean).join(' · ')}</p>
+        </div>
+
         {machine.note && <p className="rounded-xl bg-bg p-3 text-sm">{machine.note}</p>}
 
         {!machine.unknown && (
@@ -158,6 +157,39 @@ export function MachineDetailScreen() {
         )}
       </section>
 
+      <div className="flex flex-col gap-4">
+      <section className="card relative isolate flex flex-col gap-3 overflow-hidden">
+        <h2 className="subheading">{strings.bodyMap.title}</h2>
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
+          <BodyMap
+            className="w-full max-w-64"
+            regions={new Map([...muscles.secondary.map((r) => [r, 0.35] as const), ...muscles.primary.map((r) => [r, 1] as const)])}
+            pulse={muscles.primary}
+          />
+          <dl className="flex flex-col gap-3 text-sm">
+            <div>
+              <dt className="text-xs uppercase tracking-wide text-muted">{strings.bodyMap.primary}</dt>
+              {muscles.primary.map((r) => (
+                <dd key={r} className="flex items-center gap-2 font-semibold">
+                  <span className="size-2.5 rounded-full bg-muscle" />
+                  {strings.regions[r]}
+                </dd>
+              ))}
+            </div>
+            {muscles.secondary.length > 0 && (
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-muted">{strings.bodyMap.secondary}</dt>
+                {muscles.secondary.map((r) => (
+                  <dd key={r} className="flex items-center gap-2">
+                    <span className="size-2.5 rounded-full bg-muscle/45" />
+                    {strings.regions[r]}
+                  </dd>
+                ))}
+              </div>
+            )}
+          </dl>
+        </div>
+      </section>
       <section className="card flex flex-col gap-3">
         <h2 className="subheading">{strings.machineDetail.history}</h2>
         {history.length === 0 && <p className="text-muted">{strings.machineDetail.noHistory}</p>}
@@ -174,6 +206,7 @@ export function MachineDetailScreen() {
           </div>
         ))}
       </section>
+      </div>
     </div>
   );
 }

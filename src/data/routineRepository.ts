@@ -40,6 +40,13 @@ async function change(fn: (items: RoutineItem[]) => RoutineItem[]): Promise<Rout
   return updated;
 }
 
+/** Replaces the whole routine, for example with a day from a ready-made plan. */
+export async function replace(name: string, items: RoutineItem[]): Promise<Routine> {
+  const updated = { ...(await get()), name, items: items.map((i) => ({ ...i })) };
+  await save(updated);
+  return updated;
+}
+
 export function addItem(item: RoutineItem): Promise<Routine> {
   return change((items) => [...items.filter((i) => i.machineId !== item.machineId), item]);
 }
