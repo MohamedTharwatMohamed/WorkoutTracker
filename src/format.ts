@@ -1,20 +1,19 @@
+import { cmToIn, kgToLb } from './domain/units';
+
 export type WeightUnit = 'kg' | 'lb';
 export type LengthUnit = 'cm' | 'in';
-
-export const LB_PER_KG = 2.2046226218;
-export const CM_PER_IN = 2.54;
 
 const nf = (maxFractionDigits: number) =>
   new Intl.NumberFormat(undefined, { maximumFractionDigits: maxFractionDigits });
 
 export function kgToDisplay(kg: number, unit: WeightUnit): number {
   if (unit === 'kg') return kg;
-  return Math.round(kg * LB_PER_KG * 2) / 2;
+  return Math.round(kgToLb(kg) * 2) / 2;
 }
 
 export function cmToDisplay(cm: number, unit: LengthUnit): number {
   if (unit === 'cm') return cm;
-  return Math.round((cm / CM_PER_IN) * 10) / 10;
+  return Math.round(cmToIn(cm) * 10) / 10;
 }
 
 export function formatWeight(kg: number, unit: WeightUnit): string {

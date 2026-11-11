@@ -1,0 +1,141 @@
+{
+  "format": "workout-tracker-backup",
+  "formatVersion": 1,
+  "schemaVersion": 1,
+  "appBuild": "fixture",
+  "exportedAt": "2025-01-05T00:00:00.000Z",
+  "deviceId": "dev-golden",
+  "manifest": {
+    "counts": {
+      "profile": 1,
+      "machines": 1,
+      "machineSettings": 1,
+      "routines": 1,
+      "sessions": 1,
+      "sets": 2,
+      "measurements": 1,
+      "photos": 1
+    },
+    "sha256": "dea265c7dc99e2d802a852668b48a6583624863a3346b07c36d60b4de9433a07"
+  },
+  "data": {
+    "profile": {
+      "id": "me",
+      "createdAt": "2025-01-01T08:00:00.000Z",
+      "updatedAt": "2025-01-01T08:00:00.000Z",
+      "deletedAt": null,
+      "deviceId": "dev-golden",
+      "heightCm": 178,
+      "weightUnit": "kg",
+      "lengthUnit": "cm",
+      "defaultRestSec": 90
+    },
+    "machines": [
+      {
+        "id": "custom-0b7c1f3e-0000-4000-8000-000000000001",
+        "createdAt": "2025-01-02T08:00:00.000Z",
+        "updatedAt": "2025-01-02T08:00:00.000Z",
+        "deletedAt": null,
+        "deviceId": "dev-golden",
+        "name": "Gym's Hack Squat – Ünïcode",
+        "muscleGroup": "legs",
+        "weightStepKg": 2.5,
+        "aliases": [
+          "hack"
+        ]
+      }
+    ],
+    "machineSettings": [
+      {
+        "machineId": "technogym-selection-900-chest-press",
+        "updatedAt": "2025-01-02T09:00:00.000Z",
+        "deviceId": "dev-golden",
+        "restSec": 120,
+        "hidden": false
+      }
+    ],
+    "routines": [
+      {
+        "id": "main",
+        "createdAt": "2025-01-01T08:00:00.000Z",
+        "updatedAt": "2025-01-02T09:00:00.000Z",
+        "deletedAt": null,
+        "deviceId": "dev-golden",
+        "name": "My routine",
+        "items": [
+          {
+            "machineId": "technogym-selection-900-chest-press",
+            "targetSets": 3,
+            "targetReps": 10,
+            "targetWeightKg": 40
+          }
+        ]
+      }
+    ],
+    "sessions": [
+      {
+        "id": "11111111-1111-4111-8111-111111111111",
+        "createdAt": "2025-01-03T17:00:00.000Z",
+        "updatedAt": "2025-01-03T18:00:00.000Z",
+        "deletedAt": null,
+        "deviceId": "dev-golden",
+        "routineId": "main",
+        "state": "finished",
+        "machineOrder": [
+          "technogym-selection-900-chest-press"
+        ],
+        "startedAt": "2025-01-03T17:01:00.000Z",
+        "finishedAt": "2025-01-03T18:00:00.000Z"
+      }
+    ],
+    "sets": [
+      {
+        "id": "22222222-2222-4222-8222-222222222221",
+        "createdAt": "2025-01-03T17:05:00.000Z",
+        "updatedAt": "2025-01-03T17:05:00.000Z",
+        "deletedAt": null,
+        "deviceId": "dev-golden",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "machineId": "technogym-selection-900-chest-press",
+        "setNumber": 1,
+        "reps": 10,
+        "weightKg": 40,
+        "loggedAt": "2025-01-03T17:05:00.000Z"
+      },
+      {
+        "id": "22222222-2222-4222-8222-222222222222",
+        "createdAt": "2025-01-03T17:07:00.000Z",
+        "updatedAt": "2025-01-03T17:08:00.000Z",
+        "deletedAt": "2025-01-03T17:08:00.000Z",
+        "deviceId": "dev-golden",
+        "sessionId": "11111111-1111-4111-8111-111111111111",
+        "machineId": "technogym-selection-900-chest-press",
+        "setNumber": 2,
+        "reps": 8,
+        "weightKg": 42.5,
+        "loggedAt": "2025-01-03T17:07:00.000Z",
+        "restBeforeSec": 120
+      }
+    ],
+    "measurements": [
+      {
+        "id": "33333333-3333-4333-8333-333333333331",
+        "createdAt": "2025-01-04T07:00:00.000Z",
+        "updatedAt": "2025-01-04T07:00:00.000Z",
+        "deletedAt": null,
+        "deviceId": "dev-golden",
+        "site": "arm",
+        "side": "left",
+        "value": 35.2,
+        "takenAt": "2025-01-04T07:00:00.000Z"
+      }
+    ]
+  },
+  "photos": [
+    {
+      "id": "44444444-4444-4444-8444-444444444441",
+      "mime": "image/webp",
+      "base64": "UklGRhIAAABXRUJQVlA4IAYAAAAwAQCdASo="
+    }
+  ]
+}
