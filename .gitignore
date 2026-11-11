@@ -1,0 +1,8 @@
+node_modules/
+dist/
+dist-a/
+dist-b/
+coverage/
+test-results/
+playwright-report/
+scripts/source-images/

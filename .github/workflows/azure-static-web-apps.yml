@@ -1,0 +1,29 @@
+name: CI and deploy
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches: [master]
+
+jobs:
+  build_and_deploy:
+    if: github.event_name == 'push' || github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      # Added in P4: npm run catalog:check (with BASE_REF: ${{ github.base_ref }})
+      - run: npm run test:coverage
+      - run: npm run build
+      # Added in P6: npx playwright install --with-deps, npm run e2e,
+      # Azure/static-web-apps-deploy@v1 (id: deploy, action: upload), smoke step,
+      # and the close_preview job for closed pull requests.
