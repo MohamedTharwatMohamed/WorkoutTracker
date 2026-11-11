@@ -24,6 +24,11 @@ export async function get(): Promise<Routine> {
   });
 }
 
+/** Read-only lookup for live queries (which cannot write); undefined before first use. */
+export function peek(): Promise<Routine | undefined> {
+  return db().routines.get(MAIN_ROUTINE_ID);
+}
+
 export async function save(routine: Routine): Promise<void> {
   await db().routines.put({ ...routine, updatedAt: nowIso(), deviceId: await deviceId() });
 }

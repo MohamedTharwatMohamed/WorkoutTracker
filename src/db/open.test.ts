@@ -77,6 +77,25 @@ describe('openDatabase', () => {
     expect((await openDatabase()).kind).toBe('cleared');
   });
 
+  it('returns ok after onboarding with no workouts yet (zero marker, profile present)', async () => {
+    const db = new WorkoutDb();
+    await db.open();
+    await db.profile.add({
+      id: 'me',
+      heightCm: null,
+      weightUnit: 'kg',
+      lengthUnit: 'cm',
+      defaultRestSec: 90,
+      createdAt: '2025-01-01T00:00:00.000Z',
+      updatedAt: '2025-01-01T00:00:00.000Z',
+      deletedAt: null,
+      deviceId: 'd',
+    });
+    db.close();
+    writeMarker({ sets: 0, sessions: 0, measurements: 0 });
+    expect((await openDatabase()).kind).toBe('ok');
+  });
+
   it('returns failed on VersionError (database newer than the app)', async () => {
     const newer = new Dexie(DB_NAME);
     newer.version(3).stores({ x: 'id' });

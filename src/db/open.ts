@@ -78,7 +78,10 @@ export async function openDatabase(
       (counts.sets < marker.sets ||
         counts.sessions < marker.sessions ||
         counts.measurements < marker.measurements);
-    if (marker && (isEmpty(counts) || dropped)) return { kind: 'cleared', db };
+    // Onboarding writes the profile and the marker together, so a marker without
+    // a profile means the database was wiped even if the marker counts are zero.
+    const noProfile = (await db.profile.count()) === 0;
+    if (marker && (noProfile || dropped)) return { kind: 'cleared', db };
     if (!isEmpty(counts)) writeMarker(counts);
     return { kind: 'ok', db };
   } catch (error) {

@@ -10,6 +10,15 @@ beforeEach(async () => {
 });
 
 describe('measurementRepository', () => {
+  it('recent returns live rows across sites, newest first, up to the limit', async () => {
+    await measurementRepository.add({ site: 'weight', value: 80, takenAt: at(0) });
+    const gone = await measurementRepository.add({ site: 'waist', value: 85, takenAt: at(60) });
+    await measurementRepository.add({ site: 'waist', value: 84, takenAt: at(120) });
+    await measurementRepository.add({ site: 'hips', value: 99, takenAt: at(180) });
+    await measurementRepository.softDelete(gone);
+    expect((await measurementRepository.recent(2)).map((m) => m.value)).toEqual([99, 84]);
+  });
+
   it('requires a side for arm, thigh and calf and rejects it elsewhere', async () => {
     for (const site of ['arm', 'thigh', 'calf'] as const) {
       await expect(measurementRepository.add({ site, value: 30, takenAt: T0 })).rejects.toThrow('needs a side');

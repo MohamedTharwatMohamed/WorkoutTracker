@@ -1,15 +1,30 @@
-import { StrictMode } from 'react';
+import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { App } from './App';
+import { loadCatalog } from './data/catalog';
+import { openDatabase, type OpenResult } from './db/open';
 import './index.css';
-import { strings } from './strings';
+import { installHandlers } from './platform/errorLog';
+import { captureInstallPrompt } from './platform/install';
+import { DataClearedScreen } from './screens/DataClearedScreen';
+import { RecoveryScreen } from './screens/RecoveryScreen';
 
-// Placeholder shell until phase P5 (items 19 and 20).
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <main className="flex min-h-dvh items-center justify-center">
-      <h1 className="font-display text-4xl uppercase tracking-wide text-accent">
-        {strings.appName}
-      </h1>
-    </main>
-  </StrictMode>,
-);
+installHandlers();
+captureInstallPrompt();
+// Machine lists wait for the catalog; start the fetch while the database opens.
+void loadCatalog().catch(() => undefined);
+
+function Root({ result }: { result: OpenResult }) {
+  const [kind, setKind] = useState(result.kind);
+  if (result.kind === 'failed') return <RecoveryScreen error={result.error} />;
+  if (kind === 'cleared') return <DataClearedScreen onResolved={() => setKind('ok')} />;
+  return <App />;
+}
+
+void openDatabase().then((result) => {
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <Root result={result} />
+    </StrictMode>,
+  );
+});

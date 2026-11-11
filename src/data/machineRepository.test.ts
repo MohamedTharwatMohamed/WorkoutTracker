@@ -15,6 +15,28 @@ beforeEach(async () => {
 });
 
 describe('machineRepository', () => {
+  it('getMany keeps order and marks unknown IDs', async () => {
+    const views = await machineRepository.getMany(['b-l-row', 'gone', 'brand-line-chest-press']);
+    expect(views.map((m) => [m.id, m.unknown])).toEqual([
+      ['b-l-row', false],
+      ['gone', true],
+      ['brand-line-chest-press', false],
+    ]);
+  });
+
+  it('updateCustom changes fields and can clear the rest time', async () => {
+    const id = await machineRepository.addCustom({
+      name: 'Hack',
+      muscleGroup: 'legs',
+      weightStepKg: 2.5,
+      restSec: 150,
+      aliases: [],
+    });
+    await machineRepository.updateCustom(id, { name: 'Hack Squat', restSec: undefined });
+    expect(await machineRepository.get(id)).toMatchObject({ name: 'Hack Squat', customRestSec: undefined });
+    await expect(machineRepository.updateCustom('custom-none', { name: 'x' })).rejects.toThrow();
+  });
+
   it('merges catalog, settings and custom machines', async () => {
     await machineRepository.updateSettings('b-l-row', { restSec: 60, weightStepKg: 2 });
     const id = await machineRepository.addCustom({

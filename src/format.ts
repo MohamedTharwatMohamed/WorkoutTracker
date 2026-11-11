@@ -33,3 +33,21 @@ export function formatDateTime(iso: string): string {
     new Date(iso),
   );
 }
+
+/** m:ss, or h:mm:ss from one hour. */
+export function formatDuration(totalSec: number): string {
+  const sec = Math.max(0, Math.round(totalSec));
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = String(sec % 60).padStart(2, '0');
+  return h > 0 ? `${h}:${String(m).padStart(2, '0')}:${s}` : `${m}:${s}`;
+}
+
+export function formatNumber(value: number, maxFractionDigits = 1): string {
+  return nf(maxFractionDigits).format(value);
+}
+
+export function formatBytes(bytes: number): string {
+  if (bytes < 1024 * 1024) return `${nf(0).format(bytes / 1024)} KB`;
+  return `${nf(1).format(bytes / (1024 * 1024))} MB`;
+}

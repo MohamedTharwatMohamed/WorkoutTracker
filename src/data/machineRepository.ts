@@ -123,6 +123,26 @@ export async function get(id: string): Promise<MachineView> {
   return (await allViews()).find((m) => m.id === id) ?? unknownMachine(id);
 }
 
+/** Like `get` for several IDs, in the same order, reading storage once. */
+export async function getMany(ids: string[]): Promise<MachineView[]> {
+  const byId = new Map((await allViews()).map((m) => [m.id, m]));
+  return ids.map((id) => byId.get(id) ?? unknownMachine(id));
+}
+
+export async function updateCustom(
+  id: string,
+  patch: Partial<Pick<CustomMachine, 'name' | 'muscleGroup' | 'weightStepKg' | 'restSec'>>,
+): Promise<void> {
+  const device = await deviceId();
+  await db().transaction('rw', db().machines, async () => {
+    const existing = await db().machines.get(id);
+    if (!existing) throw new Error('Custom machine not found');
+    const updated: CustomMachine = { ...existing, ...patch, updatedAt: nowIso(), deviceId: device };
+    if ('restSec' in patch && patch.restSec === undefined) delete updated.restSec;
+    await db().machines.put(updated);
+  });
+}
+
 export async function addCustom(input: Omit<CustomMachine, keyof BaseRecord>): Promise<string> {
   const now = nowIso();
   const id = customMachineId();

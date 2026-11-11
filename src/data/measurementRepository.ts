@@ -36,6 +36,14 @@ export async function softDelete(id: string): Promise<void> {
   await db().measurements.update(id, { deletedAt: now, updatedAt: now, deviceId: await deviceId() });
 }
 
+/** The newest rows across all sites, newest first. */
+export async function recent(limit: number): Promise<Measurement[]> {
+  const rows = await db().measurements.toArray();
+  return visible(rows)
+    .sort((a, b) => b.takenAt.localeCompare(a.takenAt))
+    .slice(0, limit);
+}
+
 /** Rows for one site (and side), oldest first. */
 export async function series(site: Site, side?: Side, options: ReadOptions = {}): Promise<Measurement[]> {
   const rows = await db()

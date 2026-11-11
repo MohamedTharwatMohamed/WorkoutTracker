@@ -1,4 +1,6 @@
 import type { MetaEntry, MetaKey } from '../db/types';
+import { countRows } from '../db/open';
+import { writeMarker } from '../platform/storage';
 import { db, deviceId } from './internal';
 
 export type ExportState = 'completed' | 'started';
@@ -29,4 +31,9 @@ export async function changesSinceExport(): Promise<{ sets: number; total: numbe
   const profileChanges = profiles.filter((p) => typeof last !== 'string' || p.updatedAt > last).length;
   const sets = counts[0] ?? 0;
   return { sets, total: counts.reduce((a, b) => a + b, 0) + profileChanges };
+}
+
+/** Records current row counts so a later launch can detect cleared storage. */
+export async function rememberCounts(): Promise<void> {
+  writeMarker(await countRows(db()));
 }

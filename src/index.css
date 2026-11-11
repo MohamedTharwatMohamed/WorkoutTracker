@@ -30,3 +30,43 @@ body {
   color: var(--color-text);
   font-family: var(--font-sans);
 }
+
+@utility btn {
+  @apply inline-flex min-h-12 min-w-12 items-center justify-center gap-2 rounded-xl px-4 font-semibold transition select-none active:scale-[0.97] disabled:opacity-40;
+}
+
+@utility btn-primary {
+  @apply btn bg-accent text-bg uppercase tracking-wide font-display text-lg;
+}
+
+@utility btn-secondary {
+  @apply btn bg-surface text-text ring-1 ring-white/10;
+}
+
+@utility btn-danger {
+  @apply btn bg-danger/15 text-danger ring-1 ring-danger/40;
+}
+
+@utility btn-icon {
+  @apply btn px-0 bg-surface text-text ring-1 ring-white/10 text-xl;
+}
+
+@utility card {
+  @apply rounded-2xl bg-surface p-4 ring-1 ring-white/5;
+}
+
+@utility chip {
+  @apply inline-flex min-h-12 items-center rounded-full px-4 text-sm font-semibold ring-1 ring-white/15;
+}
+
+@utility field {
+  @apply min-h-12 w-full rounded-xl bg-bg px-3 text-text ring-1 ring-white/15 outline-none focus:ring-2 focus:ring-accent;
+}
+
+@utility heading {
+  @apply font-display text-3xl font-semibold uppercase tracking-wide;
+}
+
+@utility subheading {
+  @apply font-display text-xl font-medium uppercase tracking-wide text-muted;
+}
