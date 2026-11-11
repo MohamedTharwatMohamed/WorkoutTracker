@@ -21,7 +21,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
-      # Added in P4: npm run catalog:check (with BASE_REF: ${{ github.base_ref }})
+      - run: npm run catalog:check
+        env:
+          BASE_REF: ${{ github.base_ref }}
       - run: npm run test:coverage
       - run: npm run build
       # Added in P6: npx playwright install --with-deps, npm run e2e,

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="currentColor" role="img" aria-label="Shoulders">
+  <circle cx="32" cy="14" r="8"/>
+  <path d="M6 40c0-12 6-18 16-18h4v18zM58 40c0-12-6-18-16-18h-4v18z"/>
+  <rect x="27" y="26" width="10" height="30" rx="3"/>
+</svg>

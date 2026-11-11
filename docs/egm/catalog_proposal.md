@@ -1,6 +1,6 @@
 # v1 machine catalog proposal (30 machines)
 
-Status: proposal for author review. Not yet in the design draft.
+Status: implemented in `public/catalog/catalog.json` (P4). The six Hammer Strength Plate-Loaded names were checked against lifefitness.com on 2026-11-11, and all of them match. Machine photos are still pending.
 
 Rules used:
 

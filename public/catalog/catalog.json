@@ -1,0 +1,611 @@
+{
+  "catalogVersion": 1,
+  "muscleGroups": [
+    "chest",
+    "back",
+    "shoulders",
+    "arms",
+    "legs",
+    "core"
+  ],
+  "machines": [
+    {
+      "id": "technogym-selection-900-chest-press",
+      "brand": "Technogym",
+      "line": "Selection 900",
+      "model": "Chest Press",
+      "muscleGroup": "chest",
+      "secondaryMuscles": [
+        "front delts",
+        "triceps"
+      ],
+      "note": "Pressing on a fixed path builds the chest without balancing a bar.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "chest press",
+        "seated chest press"
+      ],
+      "retired": false
+    },
+    {
+      "id": "life-fitness-insignia-pectoral-fly-rear-deltoid",
+      "brand": "Life Fitness",
+      "line": "Insignia",
+      "model": "Pectoral Fly / Rear Deltoid",
+      "muscleGroup": "chest",
+      "secondaryMuscles": [
+        "rear delts"
+      ],
+      "note": "Facing in works the chest; facing out with the handles reversed works the rear shoulders.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "pec fly",
+        "pec deck",
+        "rear delt fly"
+      ],
+      "retired": false
+    },
+    {
+      "id": "hammer-strength-plate-loaded-iso-lateral-incline-press",
+      "brand": "Hammer Strength",
+      "line": "Plate-Loaded",
+      "model": "Iso-Lateral Incline Press",
+      "muscleGroup": "chest",
+      "secondaryMuscles": [
+        "front delts",
+        "triceps"
+      ],
+      "note": "Each arm moves on its own path, so the stronger side cannot take over. Targets the upper chest.",
+      "weightStepKg": 2.5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "incline press",
+        "incline chest press"
+      ],
+      "retired": false
+    },
+    {
+      "id": "matrix-versa-converging-chest-press",
+      "brand": "Matrix",
+      "line": "Versa",
+      "model": "Converging Chest Press (VS-S13)",
+      "muscleGroup": "chest",
+      "secondaryMuscles": [
+        "front delts",
+        "triceps"
+      ],
+      "note": "The arms move inwards as you press, following the natural line of the chest.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "chest press",
+        "converging press"
+      ],
+      "retired": false
+    },
+    {
+      "id": "technogym-selection-900-lat-machine",
+      "brand": "Technogym",
+      "line": "Selection 900",
+      "model": "Lat Machine",
+      "muscleGroup": "back",
+      "secondaryMuscles": [
+        "biceps"
+      ],
+      "note": "Pull the bar to the upper chest with the thighs held under the pads.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "lat pulldown",
+        "pulldown"
+      ],
+      "retired": false
+    },
+    {
+      "id": "technogym-selection-900-low-row",
+      "brand": "Technogym",
+      "line": "Selection 900",
+      "model": "Low Row",
+      "muscleGroup": "back",
+      "secondaryMuscles": [
+        "biceps",
+        "rear delts"
+      ],
+      "note": "Chest stays on the pad, so the lower back is supported while you row.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "seated row",
+        "low row"
+      ],
+      "retired": false
+    },
+    {
+      "id": "hammer-strength-plate-loaded-iso-lateral-front-lat-pulldown",
+      "brand": "Hammer Strength",
+      "line": "Plate-Loaded",
+      "model": "Iso-Lateral Front Lat Pulldown",
+      "muscleGroup": "back",
+      "secondaryMuscles": [
+        "biceps"
+      ],
+      "note": "Each arm pulls on its own path in front of the body.",
+      "weightStepKg": 2.5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "lat pulldown",
+        "front pulldown"
+      ],
+      "retired": false
+    },
+    {
+      "id": "hammer-strength-plate-loaded-iso-lateral-row",
+      "brand": "Hammer Strength",
+      "line": "Plate-Loaded",
+      "model": "Iso-Lateral Row",
+      "muscleGroup": "back",
+      "secondaryMuscles": [
+        "biceps",
+        "rear delts"
+      ],
+      "note": "Chest-supported row with independent arms for the middle back.",
+      "weightStepKg": 2.5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "row",
+        "chest supported row"
+      ],
+      "retired": false
+    },
+    {
+      "id": "matrix-versa-diverging-seated-row",
+      "brand": "Matrix",
+      "line": "Versa",
+      "model": "Diverging Seated Row (VS-S34)",
+      "muscleGroup": "back",
+      "secondaryMuscles": [
+        "biceps",
+        "rear delts"
+      ],
+      "note": "The handles move apart as you pull, squeezing the shoulder blades together.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "seated row",
+        "row"
+      ],
+      "retired": false
+    },
+    {
+      "id": "technogym-selection-900-shoulder-press",
+      "brand": "Technogym",
+      "line": "Selection 900",
+      "model": "Shoulder Press",
+      "muscleGroup": "shoulders",
+      "secondaryMuscles": [
+        "triceps"
+      ],
+      "note": "Press overhead with the back on the pad, without balancing weights above the head.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "shoulder press",
+        "overhead press"
+      ],
+      "retired": false
+    },
+    {
+      "id": "hammer-strength-plate-loaded-iso-lateral-shoulder-press",
+      "brand": "Hammer Strength",
+      "line": "Plate-Loaded",
+      "model": "Iso-Lateral Shoulder Press",
+      "muscleGroup": "shoulders",
+      "secondaryMuscles": [
+        "triceps"
+      ],
+      "note": "Each arm presses on its own path overhead.",
+      "weightStepKg": 2.5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "shoulder press",
+        "overhead press"
+      ],
+      "retired": false
+    },
+    {
+      "id": "technogym-selection-900-reverse-fly",
+      "brand": "Technogym",
+      "line": "Selection 900",
+      "model": "Reverse Fly",
+      "muscleGroup": "shoulders",
+      "secondaryMuscles": [
+        "upper back"
+      ],
+      "note": "Arms move out to the sides on a fixed arc to work the rear shoulders.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "rear delt",
+        "reverse pec deck"
+      ],
+      "retired": false
+    },
+    {
+      "id": "life-fitness-insignia-biceps-curl",
+      "brand": "Life Fitness",
+      "line": "Insignia",
+      "model": "Biceps Curl",
+      "muscleGroup": "arms",
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "note": "Upper arms rest on the pad so the curl is strict.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "bicep curl",
+        "arm curl",
+        "preacher curl"
+      ],
+      "retired": false
+    },
+    {
+      "id": "technogym-selection-900-arm-curl",
+      "brand": "Technogym",
+      "line": "Selection 900",
+      "model": "Arm Curl",
+      "muscleGroup": "arms",
+      "secondaryMuscles": [
+        "forearms"
+      ],
+      "note": "Upper arms rest on the pad so the curl is strict.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "bicep curl",
+        "arm curl"
+      ],
+      "retired": false
+    },
+    {
+      "id": "life-fitness-insignia-triceps-extension",
+      "brand": "Life Fitness",
+      "line": "Insignia",
+      "model": "Triceps Extension",
+      "muscleGroup": "arms",
+      "secondaryMuscles": [],
+      "note": "Elbows rest on the pad while the forearms push the handles down and out.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "tricep extension"
+      ],
+      "retired": false
+    },
+    {
+      "id": "matrix-versa-triceps-press",
+      "brand": "Matrix",
+      "line": "Versa",
+      "model": "Triceps Press (VS-S42)",
+      "muscleGroup": "arms",
+      "secondaryMuscles": [
+        "chest"
+      ],
+      "note": "Seated dip movement on a fixed path, without lifting body weight.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "dip",
+        "seated dip",
+        "tricep press"
+      ],
+      "retired": false
+    },
+    {
+      "id": "technogym-selection-900-leg-press",
+      "brand": "Technogym",
+      "line": "Selection 900",
+      "model": "Leg Press",
+      "muscleGroup": "legs",
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings",
+        "calves"
+      ],
+      "note": "Back stays on the seat while the legs press the platform away.",
+      "weightStepKg": 10,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "leg press",
+        "seated leg press"
+      ],
+      "retired": false
+    },
+    {
+      "id": "hammer-strength-plate-loaded-linear-leg-press",
+      "brand": "Hammer Strength",
+      "line": "Plate-Loaded",
+      "model": "Linear Leg Press",
+      "muscleGroup": "legs",
+      "secondaryMuscles": [
+        "glutes",
+        "hamstrings"
+      ],
+      "note": "The sled moves on rails at an angle, with the back supported.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "leg press",
+        "45 degree leg press"
+      ],
+      "retired": false
+    },
+    {
+      "id": "hammer-strength-plate-loaded-hack-squat",
+      "brand": "Hammer Strength",
+      "line": "Plate-Loaded",
+      "model": "Hack Squat",
+      "muscleGroup": "legs",
+      "secondaryMuscles": [
+        "glutes"
+      ],
+      "note": "Squat on a fixed track with back and shoulders on the pads. Choose a depth that feels safe for your knees and lower back.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "hack squat",
+        "squat machine"
+      ],
+      "retired": false
+    },
+    {
+      "id": "life-fitness-insignia-leg-extension",
+      "brand": "Life Fitness",
+      "line": "Insignia",
+      "model": "Leg Extension",
+      "muscleGroup": "legs",
+      "secondaryMuscles": [],
+      "note": "Straightens the knee against a pad on the shins to work the front of the thighs.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "leg extension",
+        "quad extension"
+      ],
+      "retired": false
+    },
+    {
+      "id": "matrix-versa-leg-extension",
+      "brand": "Matrix",
+      "line": "Versa",
+      "model": "Leg Extension (VS-S71)",
+      "muscleGroup": "legs",
+      "secondaryMuscles": [],
+      "note": "Straightens the knee against a pad on the shins to work the front of the thighs.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "leg extension",
+        "quad extension"
+      ],
+      "retired": false
+    },
+    {
+      "id": "life-fitness-insignia-seated-leg-curl",
+      "brand": "Life Fitness",
+      "line": "Insignia",
+      "model": "Seated Leg Curl",
+      "muscleGroup": "legs",
+      "secondaryMuscles": [
+        "calves"
+      ],
+      "note": "Bends the knee while seated, with the thighs held down by a pad.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "leg curl",
+        "hamstring curl"
+      ],
+      "retired": false
+    },
+    {
+      "id": "technogym-selection-900-prone-leg-curl",
+      "brand": "Technogym",
+      "line": "Selection 900",
+      "model": "Prone Leg Curl",
+      "muscleGroup": "legs",
+      "secondaryMuscles": [
+        "calves",
+        "glutes"
+      ],
+      "note": "Lying face down, bend the knees to work the hamstrings.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "lying leg curl",
+        "hamstring curl"
+      ],
+      "retired": false
+    },
+    {
+      "id": "technogym-selection-900-abductor",
+      "brand": "Technogym",
+      "line": "Selection 900",
+      "model": "Abductor",
+      "muscleGroup": "legs",
+      "secondaryMuscles": [
+        "glutes"
+      ],
+      "note": "Pushes the knees apart against pads to work the outer hips.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "hip abduction",
+        "outer thigh"
+      ],
+      "retired": false
+    },
+    {
+      "id": "technogym-selection-900-adductor",
+      "brand": "Technogym",
+      "line": "Selection 900",
+      "model": "Adductor",
+      "muscleGroup": "legs",
+      "secondaryMuscles": [],
+      "note": "Squeezes the knees together against pads to work the inner thighs.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "hip adduction",
+        "inner thigh"
+      ],
+      "retired": false
+    },
+    {
+      "id": "matrix-versa-glute",
+      "brand": "Matrix",
+      "line": "Versa",
+      "model": "Glute (VS-S78)",
+      "muscleGroup": "legs",
+      "secondaryMuscles": [
+        "hamstrings"
+      ],
+      "note": "Pushes one leg back on a fixed path to work the glutes.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "glute kickback",
+        "glute machine"
+      ],
+      "retired": false
+    },
+    {
+      "id": "life-fitness-insignia-calf-extension",
+      "brand": "Life Fitness",
+      "line": "Insignia",
+      "model": "Calf Extension",
+      "muscleGroup": "legs",
+      "secondaryMuscles": [],
+      "note": "Pushes through the balls of the feet to work the calves.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "calf raise",
+        "calf press"
+      ],
+      "retired": false
+    },
+    {
+      "id": "technogym-selection-900-abdominal-crunch",
+      "brand": "Technogym",
+      "line": "Selection 900",
+      "model": "Abdominal Crunch",
+      "muscleGroup": "core",
+      "secondaryMuscles": [],
+      "note": "Curls the upper body forward against resistance, with the back supported.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "ab crunch",
+        "crunch machine"
+      ],
+      "retired": false
+    },
+    {
+      "id": "matrix-versa-abdominal",
+      "brand": "Matrix",
+      "line": "Versa",
+      "model": "Abdominal (VS-S53)",
+      "muscleGroup": "core",
+      "secondaryMuscles": [],
+      "note": "Curls the upper body forward against resistance, with the back supported.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "ab crunch",
+        "crunch machine"
+      ],
+      "retired": false
+    },
+    {
+      "id": "life-fitness-insignia-back-extension",
+      "brand": "Life Fitness",
+      "line": "Insignia",
+      "model": "Back Extension",
+      "muscleGroup": "core",
+      "secondaryMuscles": [
+        "glutes"
+      ],
+      "note": "Extends the back against a pad while seated, strengthening the lower back.",
+      "weightStepKg": 5,
+      "defaultRestSec": null,
+      "image": null,
+      "imageSourceUrl": null,
+      "aliases": [
+        "lower back",
+        "back extension"
+      ],
+      "retired": false
+    }
+  ]
+}
