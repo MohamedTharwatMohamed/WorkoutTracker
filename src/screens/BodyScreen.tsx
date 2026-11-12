@@ -112,7 +112,7 @@ export default function BodyScreen() {
       </div>
 
       <section className="relative isolate overflow-hidden rounded-3xl bg-gradient-to-br from-surface to-accent/15 p-4 ring-1 ring-line/10 lg:col-span-2">
-        <HeroPhoto photo="legCurl" className="absolute inset-y-0 right-0 -z-10 hidden h-full w-[30%] opacity-70 sm:block" />
+        <HeroPhoto photo="cableCrossover" className="absolute inset-y-0 right-0 -z-10 hidden h-full w-[30%] opacity-70 sm:block" />
         <h2 className="subheading mb-3">{strings.body.latest}</h2>
         <dl className="grid grid-cols-2 gap-3 sm:max-w-[75%] sm:grid-cols-4">
           {data?.trends

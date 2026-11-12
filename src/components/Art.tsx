@@ -10,10 +10,9 @@ export const PHOTOS = {
     credit: 'Luis Morales Torres / Pexels',
     url: 'https://www.pexels.com/photo/man-exercising-with-shoulder-press-machine-in-gym-34669288/',
   },
-  legCurl: {
-    src: '/images/people/leg-curl.webp',
-    credit: 'Pexels',
-    url: 'https://www.pexels.com/photo/9152547/',
+  cableCrossover: {
+    src: '/images/people/cable-crossover.webp',
+    credit: 'Supplied by the project owner',
   },
 } satisfies Record<string, Photo>;
 

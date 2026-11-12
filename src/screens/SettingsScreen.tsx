@@ -1,4 +1,3 @@
-import { PHOTOS } from '../components/Art';
 import { useEffect, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { BackupButton, RestoreButton } from '../components/Backup';
@@ -91,8 +90,6 @@ export function SettingsScreen() {
     }
   };
 
-  const sources = catalog?.machines.filter((m) => m.image && m.imageSourceUrl) ?? [];
-
   return (
     <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2 lg:items-start">
       <div className="lg:col-span-2">
@@ -161,38 +158,6 @@ export function SettingsScreen() {
             {consistency === 0 ? strings.settings.consistent : strings.settings.inconsistent(consistency)}
           </p>
         )}
-      </Section>
-
-      <Section title={strings.settings.imageSources}>
-        {sources.length === 0 ? (
-          <p className="text-muted">{strings.settings.noImages}</p>
-        ) : (
-          <ul className="flex flex-col gap-1 text-sm">
-            {sources.map((m) => (
-              <li key={m.id}>
-                {m.brand} {m.model}:{' '}
-                <a href={m.imageSourceUrl!} className="text-accent underline" target="_blank" rel="noreferrer">
-                  {m.imageSourceUrl}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
-        <ul className="mt-2 flex flex-col gap-1 text-sm">
-          {Object.values(PHOTOS).map((p: { src: string; credit: string; url?: string }) => (
-            <li key={p.src}>
-              {strings.settings.photoBy(p.credit)}
-              {p.url && (
-                <>
-                  :{' '}
-                  <a href={p.url} className="text-accent underline" target="_blank" rel="noreferrer">
-                    {p.url}
-                  </a>
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
       </Section>
 
       <Section title={strings.settings.about}>

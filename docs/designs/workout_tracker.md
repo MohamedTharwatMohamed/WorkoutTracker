@@ -201,7 +201,7 @@ Measured over the first 4 weeks of use by the author and friends:
 | Machine catalog | 30 machines listed in [catalog proposal](../egm/catalog_proposal.md) | Author accepted the proposal. |
 | Charts | Recharts | Author choice. Loaded only on the Body and Progress screens (lazy routes). |
 | Anatomical body maps | `react-muscle-highlighter` (MIT), front and back male figures | Author choice in the UX review (P5b). Used for muscle balance, machine pages and the measuring guide. |
-| People photos | Royalty-free photos stored in `public/images/people/`, credited in Settings | Author choice in the UX review: real people, modest clothing. |
+| People photos | Royalty-free or owner-supplied photos stored in `public/images/people/`, credited in `Art.tsx` (not shown in the app) | Author choice in the UX review: real people, modest clothing. |
 | Tests | Vitest + `fake-indexeddb`, Playwright | Mechanical. |
 | Hosting | Azure Static Web Apps Free, deployed by GitHub Actions from a private repository | Author choice (brief). |
 
@@ -423,7 +423,7 @@ site has no API, no cookies and no third-party requests.
 | `/routine` | Routine editor (the single v1 routine), including set style per machine. |
 | `/progress` | Muscle balance (sets per muscle, last 7 days), weekly routine activity and streak, strength trend per machine. |
 | `/body` | Latest values, weekly check-in day, measurement entry with animated measuring guide, trend lines, history. |
-| `/settings` | Appearance (system, light, dark), units, height, default rest, backup and restore, storage status, diagnostics, image and photo sources, about. |
+| `/settings` | Appearance (system, light, dark), units, height, default rest, backup and restore, storage status, diagnostics, about. |
 | `/welcome` | Install guide, "Used this app before?", and onboarding (steps are internal state of `WelcomeScreen`, not separate routes). |
 
 The layout is one column on phones and two columns on wide screens, with a dark
@@ -1329,8 +1329,9 @@ command passes locally and in CI.
         expandable), hints, history list, trend per site.
     *   `SettingsScreen.tsx`: units, height, default rest, storage status,
         Back up, Restore (validate, preview, warn, auto-export, replace),
-        Export diagnostics, consistency check, image sources (brand, model,
-        source URL per catalog photo), About.
+        Export diagnostics, consistency check, About. Photo source URLs stay
+        in `catalog.json` (`imageSourceUrl`) and `Art.tsx` for takedown
+        requests; they are not shown in the app (owner decision).
     *   `RecoveryScreen.tsx`: shown when the database fails to open; Export raw
         data (`snapshot.exportRaw`), export a snapshot
         (`snapshot.exportSnapshot`), Report problem (export diagnostics).
@@ -1361,8 +1362,9 @@ command passes locally and in CI.
         page headers (`PageHeader.tsx`), diagonal stripes (`Art.tsx`), a
         daily motivation phrase in the side bar (`motivation.ts`) and real
         athlete photos (`HeroPhoto`). The Home hero uses the author's photo
-        (`public/images/people/tire-push.webp`); other photos are royalty-free
-        and credited in Settings.
+        (`public/images/people/tire-push.webp`) and the Body hero uses the
+        author's cable crossover photo (`cable-crossover.webp`); the
+        shoulder-press photo is royalty-free (Pexels), credited in `Art.tsx`.
     *   Machine photos: the 30 catalog photos in `public/images/machines/`.
 *   **Anatomical body maps** (`BodyMap.tsx`, `domain/muscles.ts`): front and
     back figures from `react-muscle-highlighter`. Target muscles are red
