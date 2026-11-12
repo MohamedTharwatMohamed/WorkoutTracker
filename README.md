@@ -40,9 +40,11 @@ the resource._
 
 One-time setup (in Azure and GitHub, not in this repository):
 
-1. Create the Static Web App (Free plan) linked to this repository, with build presets
-   turned off (the workflow builds the app itself).
-2. Add its deployment token as the repository secret `AZURE_STATIC_WEB_APPS_API_TOKEN`.
+1. In the Azure portal, create a Static Web App: plan **Free**, any region, and
+   **Deployment source: Other** (not GitHub; GitHub would add a second workflow file).
+2. In the new resource, open **Manage deployment token** and copy it. In GitHub, add it as
+   the repository secret `AZURE_STATIC_WEB_APPS_API_TOKEN` (Settings > Secrets and
+   variables > Actions), then re-run the latest "CI and deploy" run.
    Until then the deploy step fails; tests still run.
 3. Create an Azure budget with an e-mail alert at 100% of actual cost.
 

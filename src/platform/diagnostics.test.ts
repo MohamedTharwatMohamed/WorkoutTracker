@@ -32,9 +32,11 @@ describe('buildDiagnostics', () => {
 
     const diagnostics = await buildDiagnostics();
     const text = JSON.stringify(diagnostics);
+    // The build SHA and time are random hex/digits and could contain any value by chance.
+    const content = JSON.stringify({ ...diagnostics, appBuild: '', buildTime: '' });
 
     for (const value of ['187.3', '123.75', '98.25', '47', '39', '91.65']) {
-      expect(text).not.toContain(value);
+      expect(content).not.toContain(value);
     }
     for (const key of ['weightKg', 'reps', 'heightCm', 'value', 'site']) {
       expect(text).not.toContain(`"${key}"`);
