@@ -359,8 +359,9 @@ Version 2 adds `data.plans` (item 55). Version 1 files still import.
 }
 ```
 
-*   **Export:** builds the file, then uses `navigator.share({ files })` where
-    `navigator.canShare` allows it, otherwise downloads it. The file is named
+*   **Export:** builds the file, then on phones and tablets uses
+    `navigator.share({ files })` where `navigator.canShare` allows it;
+    desktops, and any failed share, download it. The file is named
     `workout-backup-YYYY-MM-DD-HHmm.json`. The journal and error log are not
     included.
 *   **Import (replace-all):** parse, check `format`, reject a `formatVersion`
@@ -1217,9 +1218,11 @@ command passes locally and in CI.
 
 *   **Proposed Changes**: `share.ts`: `shareOrDownload(file: File):
     Promise<'shared' | 'downloaded' | 'cancelled'>`. Uses
-    `navigator.share({files})` when `navigator.canShare({files})` is true,
-    otherwise an `<a download>` link. An `AbortError` from the share sheet
-    returns `cancelled`; other errors are thrown. `pickFile():
+    `navigator.share({files})` on touch devices (`pointer: coarse`) when
+    `navigator.canShare({files})` is true, otherwise an `<a download>` link.
+    Desktops always download: desktop share sheets often fail or cannot save
+    a file. An `AbortError` from the share sheet returns `cancelled`; any
+    other share error falls back to the download. `pickFile():
     Promise<File | null>` opens a file input for import.
 
     `backupFlow.ts`: `exportBackup(): Promise<'shared' | 'downloaded' |

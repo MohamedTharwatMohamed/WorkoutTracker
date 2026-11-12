@@ -1,13 +1,22 @@
 export type ShareResult = 'shared' | 'downloaded' | 'cancelled';
 
+/** Phones and tablets get the share sheet; desktops (where it is often missing or fails) download. */
+function prefersShare(file: File): boolean {
+  return (
+    typeof navigator.canShare === 'function' &&
+    typeof matchMedia === 'function' &&
+    matchMedia('(pointer: coarse)').matches &&
+    navigator.canShare({ files: [file] })
+  );
+}
+
 export async function shareOrDownload(file: File): Promise<ShareResult> {
-  if (typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] })) {
+  if (prefersShare(file)) {
     try {
       await navigator.share({ files: [file] });
       return 'shared';
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') return 'cancelled';
-      throw error;
     }
   }
   const url = URL.createObjectURL(file);

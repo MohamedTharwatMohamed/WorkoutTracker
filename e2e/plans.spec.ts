@@ -81,3 +81,19 @@ test('create, edit and delete my own plan, and import the template', async ({ pa
   await expect(page).toHaveURL(/\/plans$/);
   await expect(page.getByRole('heading', { name: 'Example plan' })).toHaveCount(0);
 });
+
+test('download template works when the browser offers a share sheet that fails', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(Navigator.prototype, 'canShare', { value: () => true, configurable: true });
+    Object.defineProperty(Navigator.prototype, 'share', {
+      value: () => Promise.reject(new DOMException('Share failed', 'NotAllowedError')),
+      configurable: true,
+    });
+  });
+  await onboard(page, '/plans');
+  await page.goto('/plans');
+  const download = page.waitForEvent('download');
+  await button(page, 'Download template').click();
+  expect((await download).suggestedFilename()).toBe('workout-plan-template.xlsx');
+  await expect(page.getByText('Template saved.', { exact: false })).toBeVisible();
+});
