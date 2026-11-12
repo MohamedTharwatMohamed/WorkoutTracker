@@ -402,7 +402,8 @@ site has no API, no cookies and no third-party requests.
 
 ### Diagnostics and About
 
-*   About shows app build (git SHA), schema version, backup format version and
+*   About shows app build (the first 7 characters of the git SHA; diagnostics
+    and backups keep the full SHA), schema version, backup format version and
     catalog version.
 *   "Export diagnostics" shares a JSON file with: the above versions, user
     agent, installed yes/no, storage protected yes/no, storage estimate, record

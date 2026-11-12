@@ -43,7 +43,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   return (
     <div className="flex items-center justify-between gap-3">
       <span className="text-muted">{label}</span>
-      <span className="text-right">{children}</span>
+      <span className="min-w-0 text-right [overflow-wrap:anywhere]">{children}</span>
     </div>
   );
 }
@@ -161,7 +161,7 @@ export function SettingsScreen() {
       </Section>
 
       <Section title={strings.settings.about}>
-        <Row label={strings.settings.build}>{APP_BUILD}</Row>
+        <Row label={strings.settings.build}>{APP_BUILD.slice(0, 7)}</Row>
         <Row label={strings.settings.buildTime}>{BUILD_TIME}</Row>
         <Row label={strings.settings.schema}>{SCHEMA_VERSION}</Row>
         <Row label={strings.settings.backupFormat}>{BACKUP_FORMAT_VERSION}</Row>
