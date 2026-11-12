@@ -35,8 +35,7 @@ push to `master` and every pull request, then deploys `dist/` to Azure Static We
 (Free plan). Pull requests get preview environments, removed when the pull request closes.
 After each deploy a smoke step checks the main files and that `sw.js` is not cached.
 
-Live address: _not set yet. Add the `*.azurestaticapps.net` address here after creating
-the resource._
+Live address: https://black-wave-086835010.4.azurestaticapps.net
 
 One-time setup (in Azure and GitHub, not in this repository):
 
