@@ -1363,8 +1363,8 @@ command passes locally and in CI.
         daily motivation phrase in the side bar (`motivation.ts`) and real
         athlete photos (`HeroPhoto`). The Home hero uses the author's photo
         (`public/images/people/tire-push.webp`) and the Body hero uses the
-        author's cable crossover photo (`cable-crossover.webp`); the
-        shoulder-press photo is royalty-free (Pexels), credited in `Art.tsx`.
+        author's cable crossover photo (`cable-crossover.webp`). Both are
+        credited in `Art.tsx`.
     *   Machine photos: the 30 catalog photos in `public/images/machines/`.
 *   **Anatomical body maps** (`BodyMap.tsx`, `domain/muscles.ts`): front and
     back figures from `react-muscle-highlighter`. Target muscles are red

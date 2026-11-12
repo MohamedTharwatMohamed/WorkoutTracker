@@ -5,11 +5,6 @@ export const PHOTOS = {
     src: '/images/people/tire-push.webp',
     credit: 'Supplied by the project owner',
   },
-  shoulderPress: {
-    src: '/images/people/shoulder-press.webp',
-    credit: 'Luis Morales Torres / Pexels',
-    url: 'https://www.pexels.com/photo/man-exercising-with-shoulder-press-machine-in-gym-34669288/',
-  },
   cableCrossover: {
     src: '/images/people/cable-crossover.webp',
     credit: 'Supplied by the project owner',
