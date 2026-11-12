@@ -1577,7 +1577,7 @@ command passes locally and in CI.
         `Azure/static-web-apps-deploy@v1`
         (step `id: deploy`) with `action: upload`, `app_location: dist`,
         `skip_app_build: true` and the secret
-        `AZURE_STATIC_WEB_APPS_API_TOKEN`. Pull requests deploy to a preview
+        `AZURE_STATIC_WEB_APPS_API_TOKEN_BLACK_WAVE_086835010`. Pull requests deploy to a preview
         environment.
     *   Smoke step after deploy, using `URL=${{
         steps.deploy.outputs.static_web_app_url }}`: requests `/`, `/sw.js`,
@@ -1635,7 +1635,7 @@ command passes locally and in CI.
     `*.azurestaticapps.net` address in `README.md`. Never delete this
     resource.
 2.  Add the deployment token as the repository secret
-    `AZURE_STATIC_WEB_APPS_API_TOKEN`.
+    `AZURE_STATIC_WEB_APPS_API_TOKEN_BLACK_WAVE_086835010`.
 3.  Create an Azure budget on the subscription with the smallest amount Azure
     accepts (the exact minimum is not verified) and an e-mail alert at 100%
     of actual cost.
